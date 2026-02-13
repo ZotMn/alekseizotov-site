@@ -194,28 +194,27 @@
 
 @media (max-width: 900px) {
     
-    /* 1. ГЛОБАЛЬНЫЙ СБРОС (ЧТОБЫ БЫЛ СКРОЛЛ) */
-    html, body {
-        overflow-x: hidden !important;   /* Запрет скролла вправо-влево */
-        overflow-y: auto !important;     /* Разрешаем скролл вниз */
-        height: auto !important;
-        position: relative !important;
-    }
+ /* ЗАМЕНИ ЭТОТ КУСОК В ПУНКТЕ 1 */
+html, body {
+    overflow: hidden !important; /* Убираем системный скролл */
+    height: 100% !important;     /* Жесткая высота под экран */
+    width: 100%;
+    position: fixed;             /* Блокируем "резиновость" iOS */
+}
 
-    .app-container { 
-        display: block !important; 
-        height: auto !important; 
-        overflow: visible !important;
-    }
-    
-    .sidebar { display: none !important; }
-    
-    .main-viewport {
-        padding-top: 60px !important;    /* Место под шапку */
-        padding-bottom: 100px !important; /* Место под меню снизу */
-        height: auto !important;
-        overflow: visible !important;
-    }
+.app-container { 
+    display: block !important; 
+    height: 100% !important; 
+    overflow: hidden !important;
+}
+
+.main-viewport {
+    padding-top: 60px !important;    
+    padding-bottom: 80px !important; 
+    height: 100% !important;         /* Занимает весь остаток экрана */
+    overflow-y: auto !important;     /* Скролл живет ТОЛЬКО здесь */
+    -webkit-overflow-scrolling: touch; /* Плавность для iPhone */
+}
 
     /* 2. ШАПКА И НИЖНЕЕ МЕНЮ */
     .mobile-header {
@@ -237,7 +236,18 @@
         color: #666; font-size: 0.6rem;
     }
     .dock-item.active { color: var(--accent-primary); }
-
+/* ДОПОЛНИ ПУНКТ 2 */
+.mobile-dock {
+    display: grid; 
+    grid-template-columns: repeat(5, 1fr);
+    background: rgba(5, 5, 7, 0.95); /* Чуть прозрачности для стиля */
+    backdrop-filter: blur(10px);    /* Эффект стекла */
+    border-top: 1px solid #333;
+    position: fixed; bottom: 0; left: 0; width: 100%; z-index: 9999;
+    padding-bottom: env(safe-area-inset-bottom); /* АВТО-ОТСТУП для iPhone */
+    height: auto !important;
+    min-height: 70px;
+}
     /* 3. ГЛАВНЫЙ ЭКРАН (HERO) - КНОПКА ВИДНА */
     #view-welcome {
         min-height: 85vh !important; /* Не 100%, чтобы кнопка влезла */
@@ -258,22 +268,25 @@
         padding-bottom: 60px !important; /* Отступ от бегущей строки */
     }
     .tech-marquee-wrapper { bottom: 70px !important; } /* Поднимаем строку выше меню */
-
-    /* 4. ПРОФИЛЬ (ФОТО НЕ ОБРЕЗАНО) */
-    #view-profile { height: auto !important; display: block !important; }
-    .profile-container { padding: 15px !important; background: none !important; }
-    .profile-card {
-        grid-template-columns: 1fr !important;
-        padding: 20px !important;
-        gap: 20px !important;
-        background: #141419 !important;
-    }
-    .profile-photo {
-        height: 300px !important;
-        width: 100% !important;
-        object-fit: cover !important;
-        object-position: center 20% !important; /* Фокус на лицо, а не макушку */
-    }
+/* ДОПОЛНИ ПУНКТ 3 */
+.hero-wrapper::before {
+    content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
+    /* Градиент: сверху темно, снизу еще темнее, чтобы кнопка горела */
+    background: linear-gradient(to bottom, rgba(5,5,7,0.7) 0%, rgba(5,5,7,0.9) 100%); 
+    z-index: 1;
+}
+   /* ОБНОВИ ПУНКТ 4 */
+.profile-photo {
+    height: 250px !important; /* Чуть ниже, чтобы вылез био-текст */
+    width: 100% !important;
+    border-radius: 15px !important;
+    object-fit: cover !important;
+    object-position: center 20% !important; 
+}
+.profile-card {
+    border-radius: 20px !important; /* Скругление для мягкости */
+    margin: 10px;                  /* Отступ от краев экрана */
+}
 
     /* 5. КАЛЬКУЛЯТОР (НОРМАЛЬНЫЙ ВИД) */
     .roi-grid {
@@ -1783,6 +1796,7 @@ matrixApp.init();
 </body>
 
 </html>
+
 
 
 
