@@ -186,119 +186,103 @@
     .p-node:hover { transform: translateY(-5px); border-color: #555; }
     .p-arrow { color: #555; font-size: 20px; }
 
-/* MOBILE & RESPONSIVE UPGRADE */
+/* ================================================= */
+/* УМНЫЙ АДАПТИВ (PC + MOBILE)                       */
+/* ================================================= */
+
+/* 1. По умолчанию (ПК) скрываем мобильные элементы */
 .mobile-header, .mobile-dock { display: none; }
 
+/* 2. Настройки только для ТЕЛЕФОНОВ (ширина < 900px) */
 @media (max-width: 900px) {
-    /* 1. LAYOUT RESET */
+    
+    /* --- ПЕРЕКЛЮЧЕНИЕ ИНТЕРФЕЙСА --- */
     .app-container { 
-        display: block; /* Disable Grid */
-        height: 100vh;
-        overflow: hidden;
+        display: block !important;       /* Отключаем сетку ПК */
+        height: auto !important; 
+        overflow-y: auto !important;     /* Разрешаем прокрутку страницы */
+        padding-bottom: 90px;            /* Место для нижнего меню */
     }
     
-    .sidebar { display: none; } /* Hide Desktop Sidebar */
+    .sidebar { display: none !important; } /* Скрываем боковое меню ПК */
     
-    /* 2. ENABLE MOBILE UI */
+    /* Показываем мобильную шапку */
     .mobile-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        display: flex; justify-content: space-between; align-items: center;
         padding: 15px 20px;
-        background: rgba(5,5,7,0.9);
-        backdrop-filter: blur(10px);
+        background: rgba(5,5,7,0.95);
+        backdrop-filter: blur(15px);
         border-bottom: 1px solid var(--glass-border);
-        position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+        position: fixed; top: 0; left: 0; width: 100%; z-index: 999;
     }
     
+    /* Показываем нижнее меню (Док) */
     .mobile-dock {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        background: rgba(15, 16, 20, 0.95);
-        backdrop-filter: blur(15px);
+        display: grid; grid-template-columns: repeat(5, 1fr);
+        background: #0f1014; /* Плотный фон, чтобы не просвечивал текст */
         border-top: 1px solid var(--glass-border);
-        position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100;
-        padding-bottom: env(safe-area-inset-bottom); /* iPhone Home Bar fix */
+        position: fixed; bottom: 0; left: 0; width: 100%; z-index: 999;
+        padding-bottom: env(safe-area-inset-bottom); /* Отступ для iPhone полоски */
+        height: 70px;
     }
     
     .dock-item {
-        padding: 12px 0;
-        text-align: center;
-        color: var(--text-muted);
-        font-size: 0.6rem;
-        font-family: var(--font-mono);
+        padding: 8px 0; text-align: center; color: #666;
+        font-size: 0.65rem; font-family: var(--font-mono);
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
         cursor: pointer;
-        transition: 0.2s;
-        display: flex; flex-direction: column; align-items: center; gap: 4px;
     }
-    .dock-item.active { color: var(--accent-primary); }
+    .dock-item.active { color: var(--accent-primary); background: rgba(255,255,255,0.05); }
     .dock-item span.material-symbols-outlined { font-size: 24px; }
 
-    /* 3. MAIN CONTENT ADJUSTMENTS */
+    /* --- ИСПРАВЛЕНИЯ КОНТЕНТА --- */
     .main-viewport {
-        height: 100%;
-        padding-top: 60px; /* Space for Header */
-        padding-bottom: 80px; /* Space for Dock */
-        overflow-y: auto;
+        padding-top: 70px !important; /* Отступ сверху для шапки */
+        height: auto !important;
     }
-    
-    .view-section { 
-        padding: 20px 15px; 
-    }
-    
-    /* 4. TYPOGRAPHY SCALING */
-    h1.hero-title { font-size: 2.5rem; }
-    h2 { font-size: 2rem; }
-    
-    /* 5. PROFILE SECTION FIXES */
-    .profile-card { 
-        grid-template-columns: 1fr; 
-        padding: 20px; 
-        gap: 20px;
-        background: rgba(20, 20, 25, 0.8);
-    }
-    .profile-photo { 
-        height: 280px; 
-        width: 100%;
-    }
-    .badges-grid { gap: 8px; }
-    .profile-badge { padding: 10px; }
-    .philosophy-box { flex-direction: column; }
-    .philosophy-box > div:first-child { 
-        border-right: none; 
-        border-bottom: 1px solid rgba(255,255,255,0.1); 
-        padding: 0 0 15px 0; margin-bottom: 15px;
-        flex-direction: row; gap: 20px;
-    }
+    .view-section { padding: 20px 15px !important; }
 
-    /* 6. ROI CALCULATOR FIXES */
-    #view-roi > div { padding: 0; }
-    #view-roi input { font-size: 16px; } /* Prevents iOS zoom */
-    .roi-grid-fix { display: flex; flex-direction: column; gap: 30px; }
+    /* --- ПРОФИЛЬ (Ваше фото) --- */
+    .profile-card {
+        grid-template-columns: 1fr !important; /* Одна колонка */
+        padding: 20px !important;
+        gap: 20px !important;
+        background: rgba(20, 20, 25, 0.9) !important;
+    }
+    .profile-photo {
+        height: 250px !important; /* Уменьшаем высоту фото */
+        width: 100% !important;
+        object-position: top center;
+    }
+    .profile-info h2 { font-size: 2rem !important; }
     
-    /* 7. MATRIX & CASES */
-    .matrix-layout { display: flex; flex-direction: column; height: auto; }
-    #matrix-nav { 
-        flex-direction: row; 
-        overflow-x: auto; 
-        white-space: nowrap; 
+    /* --- КАЛЬКУЛЯТОР (ROI) --- */
+    .roi-grid {
+        grid-template-columns: 1fr !important; /* Одна колонка вместо двух */
+        gap: 20px !important;
+    }
+    #roi-total { font-size: 2.5rem !important; word-break: break-all; }
+    input { font-size: 16px !important; } /* Фикс зума на iPhone */
+
+    /* --- МАТРИЦА И ТАБЫ (Чтобы двигались) --- */
+    .matrix-toggle, .pipeline-vis, #matrix-nav {
+        display: flex !important;
+        flex-wrap: nowrap !important; /* Запрещаем перенос строк */
+        overflow-x: auto !important;  /* Разрешаем свайп влево-вправо */
         padding-bottom: 10px;
-        margin-bottom: 15px;
-        max-height: none;
+        justify-content: flex-start !important;
     }
-    .dept-btn { min-width: 200px; margin-right: 10px; }
+    /* Скрываем скроллбар, но оставляем свайп */
+    .matrix-toggle::-webkit-scrollbar, .pipeline-vis::-webkit-scrollbar { display: none; }
     
-    .pipeline-vis { padding: 20px; }
+    .m-btn, .dept-btn { flex: 0 0 auto; margin-right: 10px; } /* Кнопки не сжимаются */
     
-    .case-card { grid-template-columns: 1fr; }
-    .case-meta { 
-        border-right: none; 
-        border-bottom: 1px solid #333; 
-        padding: 20px;
-    }
+    /* Карточки кейсов */
+    .case-card { grid-template-columns: 1fr !important; }
+    .case-meta { border-right: none !important; border-bottom: 1px solid #333; }
     
-    /* 8. HIDE DECORATIVE ELEMENTS THAT BREAK LAYOUT */
-    .hero-wrapper { background-attachment: scroll; } /* Fix mobile parallax */
+    /* Модальные окна (политика) */
+    .doc-box { width: 95% !important; margin-bottom: 80px; }
 }
         /* SOCIAL ICONS STYLES */
     .social-block {
@@ -513,34 +497,34 @@
         </div>
     </nav>
 <div class="mobile-header">
-    <div class="logo-area">
-        <span class="material-symbols-outlined">grid_4x4</span> SYSTEM_ARCHITECT
+    <div class="logo-area" style="color:var(--accent-primary); font-family:var(--font-mono); font-weight:700; display:flex; align-items:center; gap:5px;">
+        <span class="material-symbols-outlined">grid_4x4</span> SYS_ARCH
     </div>
-    <div class="mobile-user" onclick="router.go('profile', null)">
-        <img src="me.jpg" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
+    <div onclick="router.go('profile', null)">
+        <img src="me.jpg" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--accent-primary); object-fit: cover;">
     </div>
 </div>
 
 <nav class="mobile-dock">
-    <div class="dock-item active" onclick="router.go('welcome', this)">
+    <div class="dock-item" onclick="router.go('welcome', this)">
         <span class="material-symbols-outlined">bolt</span>
-        <span>Start</span>
+        <span>Старт</span>
     </div>
     <div class="dock-item" onclick="router.go('roi', this)">
         <span class="material-symbols-outlined">calculate</span>
-        <span>ROI</span>
+        <span>Убытки</span>
     </div>
     <div class="dock-item" onclick="router.go('cases', this)">
         <span class="material-symbols-outlined">terminal</span>
-        <span>Cases</span>
+        <span>Кейсы</span>
     </div>
     <div class="dock-item" onclick="router.go('matrix', this)">
         <span class="material-symbols-outlined">hub</span>
-        <span>Matrix</span>
+        <span>Матрица</span>
     </div>
     <div class="dock-item" onclick="router.go('library', this)">
         <span class="material-symbols-outlined">library_books</span>
-        <span>Base</span>
+        <span>База</span>
     </div>
 </nav>
     <main class="main-viewport">
@@ -1269,26 +1253,26 @@ function calcAiTest() {
 
 const router = {
     go: function(viewId, navEl) {
-        // 1. Switch View
+        // 1. Переключаем экран
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
         document.getElementById('view-' + viewId).classList.add('active');
         
-        // 2. Update Desktop Sidebar
+        // 2. Если кликнули на ПК (Боковое меню) - подсвечиваем его
         document.querySelectorAll('.nav-menu .nav-item').forEach(el => el.classList.remove('active'));
-        // Try to find the matching desktop item by text or index logic if needed, 
-        // OR simply rely on the 'navEl' passed from the click.
         if(navEl && navEl.classList.contains('nav-item')) {
             navEl.classList.add('active');
         }
 
-        // 3. Update Mobile Dock (The new part)
+        // 3. Если кликнули на Телефоне (Нижнее меню) - ищем кнопку и подсвечиваем
         document.querySelectorAll('.mobile-dock .dock-item').forEach(el => el.classList.remove('active'));
-        // Find the dock item that calls this viewId
-        const activeDock = document.querySelector(`.dock-item[onclick*="'${viewId}'"]`);
-        if(activeDock) activeDock.classList.add('active');
+        // Ищем кнопку в нижнем меню, которая ведет на этот экран
+        const mobileBtn = document.querySelector(`.mobile-dock .dock-item[onclick*="'${viewId}'"]`);
+        if(mobileBtn) mobileBtn.classList.add('active');
 
-        // 4. Scroll to top
-        document.querySelector('.main-viewport').scrollTo(0,0);
+        // 4. Прокручиваем вверх
+        window.scrollTo(0,0);
+        const viewport = document.querySelector('.main-viewport');
+        if(viewport) viewport.scrollTo(0,0);
     }
 };
 
@@ -1733,5 +1717,6 @@ matrixApp.init();
 </body>
 
 </html>
+
 
 
