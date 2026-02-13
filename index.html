@@ -194,42 +194,80 @@
 
 @media (max-width: 900px) {
     
-    /* 1. Настройка главного экрана */
-    #view-welcome {
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important; /* Центрируем по вертикали */
-        height: 100vh !important;           /* На весь экран */
-        padding-top: 0 !important;
+    /* 1. ГЛОБАЛЬНЫЙ СБРОС (ЧТОБЫ БЫЛ СКРОЛЛ) */
+    html, body {
+        overflow-x: hidden !important;   /* Запрет скролла вправо-влево */
+        overflow-y: auto !important;     /* Разрешаем скролл вниз */
+        height: auto !important;
         position: relative !important;
-        overflow: hidden !important;        /* Чтобы фон не вылезал */
     }
 
-    /* 2. Поднимаем текст и кнопку ВВЕРХ */
+    .app-container { 
+        display: block !important; 
+        height: auto !important; 
+        overflow: visible !important;
+    }
+    
+    .sidebar { display: none !important; }
+    
+    .main-viewport {
+        padding-top: 60px !important;    /* Место под шапку */
+        padding-bottom: 100px !important; /* Место под меню снизу */
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    /* 2. ШАПКА И НИЖНЕЕ МЕНЮ */
+    .mobile-header {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 10px 20px;
+        background: #050507; border-bottom: 1px solid #333;
+        position: fixed; top: 0; left: 0; width: 100%; z-index: 9999;
+    }
+    
+    .mobile-dock {
+        display: grid; grid-template-columns: repeat(5, 1fr);
+        background: #050507; border-top: 1px solid #333;
+        position: fixed; bottom: 0; left: 0; width: 100%; z-index: 9999;
+        padding-bottom: env(safe-area-inset-bottom);
+        height: 70px;
+    }
+    .dock-item {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        color: #666; font-size: 0.6rem;
+    }
+    .dock-item.active { color: var(--accent-primary); }
+
+    /* 3. ГЛАВНЫЙ ЭКРАН (HERO) - КНОПКА ВИДНА */
+    #view-welcome {
+        min-height: 85vh !important; /* Не 100%, чтобы кнопка влезла */
+        display: flex !important;
+        align-items: center;
+    }
+    .hero-wrapper {
+        background-position: center !important;
+        padding: 20px !important;
+    }
+    /* Затемнение фона, чтобы текст читался */
+    .hero-wrapper::before {
+        content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
+        background: rgba(0,0,0,0.7); z-index: 1;
+    }
     .hero-content {
-        /* САМОЕ ВАЖНОЕ: отступ снизу 180px выталкивает кнопку из-под меню */
-        padding-bottom: 180px !important; 
-        padding-left: 20px !important;
-        padding-right: 20px !important;
-        z-index: 10 !important;
-        width: 100%;
+        position: relative; z-index: 2;
+        padding-bottom: 60px !important; /* Отступ от бегущей строки */
     }
+    .tech-marquee-wrapper { bottom: 70px !important; } /* Поднимаем строку выше меню */
 
-    /* 3. Бегущая строка (n8n AUTOMATION...) */
-    .tech-marquee-wrapper {
-        bottom: 70px !important; /* Ставим СРАЗУ над нижним меню */
-        background: rgba(5,5,7,0.8) !important; /* Темный фон, чтобы текст читался */
-        border-top: 1px solid rgba(255,255,255,0.1);
-        z-index: 5 !important;
+    /* 4. ПРОФИЛЬ (ФОТО НЕ ОБРЕЗАНО) */
+    #view-profile { height: auto !important; display: block !important; }
+    .profile-container { padding: 15px !important; background: none !important; }
+    .profile-card {
+        grid-template-columns: 1fr !important;
+        padding: 20px !important;
+        gap: 20px !important;
+        background: #141419 !important;
     }
-
-    /* 4. Сама кнопка */
-    .hero-btn {
-        position: relative;
-        z-index: 20 !important; /* Чтобы точно нажималась */
-        box-shadow: 0 10px 30px rgba(91, 108, 249, 0.4) !important;
-    }
-}
     .profile-photo {
         height: 300px !important;
         width: 100% !important;
@@ -1745,6 +1783,7 @@ matrixApp.init();
 </body>
 
 </html>
+
 
 
 
