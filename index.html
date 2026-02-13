@@ -186,23 +186,120 @@
     .p-node:hover { transform: translateY(-5px); border-color: #555; }
     .p-arrow { color: #555; font-size: 20px; }
 
-    /* MOBILE */
-    @media (max-width: 900px) {
-        .app-container { grid-template-columns: 1fr; }
-        .sidebar { display: none; }
-        .profile-card { grid-template-columns: 1fr; padding: 20px; }
-        .profile-photo { height: 300px; }
-        .matrix-layout { grid-template-columns: 1fr; height: auto; }
-        #matrix-nav { max-height: 250px; flex-direction: row; overflow-x: auto; margin-bottom: 20px; }
-        .dept-btn { min-width: 220px; }
-        .pain-gain-row { grid-template-columns: 1fr; }
-        /* Mobile Updates for New Blocks */
-        .case-card { grid-template-columns: 1fr !important; }
-        .case-meta { border-right: none; border-bottom: 1px solid #333; flex-direction: row; justify-content: space-between; align-items: center; }
-        .case-meta div { margin: 0 !important; }
-        .philosophy-box { flex-direction: column; }
-        .philosophy-box > div:first-child { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; padding-right: 0; flex-direction: row; gap: 20px; }
+/* MOBILE & RESPONSIVE UPGRADE */
+.mobile-header, .mobile-dock { display: none; }
+
+@media (max-width: 900px) {
+    /* 1. LAYOUT RESET */
+    .app-container { 
+        display: block; /* Disable Grid */
+        height: 100vh;
+        overflow: hidden;
     }
+    
+    .sidebar { display: none; } /* Hide Desktop Sidebar */
+    
+    /* 2. ENABLE MOBILE UI */
+    .mobile-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 20px;
+        background: rgba(5,5,7,0.9);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--glass-border);
+        position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+    }
+    
+    .mobile-dock {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        background: rgba(15, 16, 20, 0.95);
+        backdrop-filter: blur(15px);
+        border-top: 1px solid var(--glass-border);
+        position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100;
+        padding-bottom: env(safe-area-inset-bottom); /* iPhone Home Bar fix */
+    }
+    
+    .dock-item {
+        padding: 12px 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.6rem;
+        font-family: var(--font-mono);
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .dock-item.active { color: var(--accent-primary); }
+    .dock-item span.material-symbols-outlined { font-size: 24px; }
+
+    /* 3. MAIN CONTENT ADJUSTMENTS */
+    .main-viewport {
+        height: 100%;
+        padding-top: 60px; /* Space for Header */
+        padding-bottom: 80px; /* Space for Dock */
+        overflow-y: auto;
+    }
+    
+    .view-section { 
+        padding: 20px 15px; 
+    }
+    
+    /* 4. TYPOGRAPHY SCALING */
+    h1.hero-title { font-size: 2.5rem; }
+    h2 { font-size: 2rem; }
+    
+    /* 5. PROFILE SECTION FIXES */
+    .profile-card { 
+        grid-template-columns: 1fr; 
+        padding: 20px; 
+        gap: 20px;
+        background: rgba(20, 20, 25, 0.8);
+    }
+    .profile-photo { 
+        height: 280px; 
+        width: 100%;
+    }
+    .badges-grid { gap: 8px; }
+    .profile-badge { padding: 10px; }
+    .philosophy-box { flex-direction: column; }
+    .philosophy-box > div:first-child { 
+        border-right: none; 
+        border-bottom: 1px solid rgba(255,255,255,0.1); 
+        padding: 0 0 15px 0; margin-bottom: 15px;
+        flex-direction: row; gap: 20px;
+    }
+
+    /* 6. ROI CALCULATOR FIXES */
+    #view-roi > div { padding: 0; }
+    #view-roi input { font-size: 16px; } /* Prevents iOS zoom */
+    .roi-grid-fix { display: flex; flex-direction: column; gap: 30px; }
+    
+    /* 7. MATRIX & CASES */
+    .matrix-layout { display: flex; flex-direction: column; height: auto; }
+    #matrix-nav { 
+        flex-direction: row; 
+        overflow-x: auto; 
+        white-space: nowrap; 
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        max-height: none;
+    }
+    .dept-btn { min-width: 200px; margin-right: 10px; }
+    
+    .pipeline-vis { padding: 20px; }
+    
+    .case-card { grid-template-columns: 1fr; }
+    .case-meta { 
+        border-right: none; 
+        border-bottom: 1px solid #333; 
+        padding: 20px;
+    }
+    
+    /* 8. HIDE DECORATIVE ELEMENTS THAT BREAK LAYOUT */
+    .hero-wrapper { background-attachment: scroll; } /* Fix mobile parallax */
+}
         /* SOCIAL ICONS STYLES */
     .social-block {
         display: flex;
@@ -415,7 +512,37 @@
             </div>
         </div>
     </nav>
+<div class="mobile-header">
+    <div class="logo-area">
+        <span class="material-symbols-outlined">grid_4x4</span> SYSTEM_ARCHITECT
+    </div>
+    <div class="mobile-user" onclick="router.go('profile', null)">
+        <img src="me.jpg" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
+    </div>
+</div>
 
+<nav class="mobile-dock">
+    <div class="dock-item active" onclick="router.go('welcome', this)">
+        <span class="material-symbols-outlined">bolt</span>
+        <span>Start</span>
+    </div>
+    <div class="dock-item" onclick="router.go('roi', this)">
+        <span class="material-symbols-outlined">calculate</span>
+        <span>ROI</span>
+    </div>
+    <div class="dock-item" onclick="router.go('cases', this)">
+        <span class="material-symbols-outlined">terminal</span>
+        <span>Cases</span>
+    </div>
+    <div class="dock-item" onclick="router.go('matrix', this)">
+        <span class="material-symbols-outlined">hub</span>
+        <span>Matrix</span>
+    </div>
+    <div class="dock-item" onclick="router.go('library', this)">
+        <span class="material-symbols-outlined">library_books</span>
+        <span>Base</span>
+    </div>
+</nav>
     <main class="main-viewport">
         
         <div id="view-welcome" class="view-section active">
@@ -1142,12 +1269,26 @@ function calcAiTest() {
 
 const router = {
     go: function(viewId, navEl) {
+        // 1. Switch View
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
         document.getElementById('view-' + viewId).classList.add('active');
-        if(navEl) {
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        
+        // 2. Update Desktop Sidebar
+        document.querySelectorAll('.nav-menu .nav-item').forEach(el => el.classList.remove('active'));
+        // Try to find the matching desktop item by text or index logic if needed, 
+        // OR simply rely on the 'navEl' passed from the click.
+        if(navEl && navEl.classList.contains('nav-item')) {
             navEl.classList.add('active');
         }
+
+        // 3. Update Mobile Dock (The new part)
+        document.querySelectorAll('.mobile-dock .dock-item').forEach(el => el.classList.remove('active'));
+        // Find the dock item that calls this viewId
+        const activeDock = document.querySelector(`.dock-item[onclick*="'${viewId}'"]`);
+        if(activeDock) activeDock.classList.add('active');
+
+        // 4. Scroll to top
+        document.querySelector('.main-viewport').scrollTo(0,0);
     }
 };
 
@@ -1592,4 +1733,5 @@ matrixApp.init();
 </body>
 
 </html>
+
 
