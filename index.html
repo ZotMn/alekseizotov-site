@@ -187,102 +187,105 @@
     .p-arrow { color: #555; font-size: 20px; }
 
 /* ================================================= */
-/* УМНЫЙ АДАПТИВ (PC + MOBILE)                       */
+/* ФИНАЛЬНЫЙ МОБИЛЬНЫЙ ПАТЧ v3.0 (SCROLL FIX)        */
 /* ================================================= */
 
-/* 1. По умолчанию (ПК) скрываем мобильные элементы */
 .mobile-header, .mobile-dock { display: none; }
 
-/* 2. Настройки только для ТЕЛЕФОНОВ (ширина < 900px) */
 @media (max-width: 900px) {
     
-    /* --- ПЕРЕКЛЮЧЕНИЕ ИНТЕРФЕЙСА --- */
+    /* 1. ГЛАВНОЕ: РАЗБЛОКИРОВКА ПРОКРУТКИ ВВЕРХ-ВНИЗ */
+    html, body {
+        overflow-y: auto !important;     /* Разрешаем скролл браузеру */
+        height: auto !important;         /* Убираем жесткую высоту */
+        position: static !important;     /* Убираем фиксацию */
+        touch-action: pan-y !important;  /* Разрешаем жесты */
+    }
+
     .app-container { 
-        display: block !important;       /* Отключаем сетку ПК */
+        display: block !important; 
         height: auto !important; 
-        overflow-y: auto !important;     /* Разрешаем прокрутку страницы */
-        padding-bottom: 90px;            /* Место для нижнего меню */
+        overflow: visible !important;    /* Контент может вылезать вниз */
+        padding-bottom: 90px;            /* Место под нижнее меню */
     }
     
-    .sidebar { display: none !important; } /* Скрываем боковое меню ПК */
-    
-    /* Показываем мобильную шапку */
+    .sidebar { display: none !important; }
+    .main-viewport { 
+        padding-top: 70px !important; 
+        height: auto !important; 
+        overflow: visible !important;
+    }
+
+    /* 2. ШАПКА И НИЖНЕЕ МЕНЮ (Фиксированные) */
     .mobile-header {
         display: flex; justify-content: space-between; align-items: center;
         padding: 15px 20px;
         background: rgba(5,5,7,0.95);
         backdrop-filter: blur(15px);
         border-bottom: 1px solid var(--glass-border);
-        position: fixed; top: 0; left: 0; width: 100%; z-index: 999;
+        position: fixed; top: 0; left: 0; width: 100%; z-index: 9999;
     }
     
-    /* Показываем нижнее меню (Док) */
     .mobile-dock {
         display: grid; grid-template-columns: repeat(5, 1fr);
-        background: #0f1014; /* Плотный фон, чтобы не просвечивал текст */
+        background: #0f1014;
         border-top: 1px solid var(--glass-border);
-        position: fixed; bottom: 0; left: 0; width: 100%; z-index: 999;
-        padding-bottom: env(safe-area-inset-bottom); /* Отступ для iPhone полоски */
+        position: fixed; bottom: 0; left: 0; width: 100%; z-index: 9999;
+        padding-bottom: env(safe-area-inset-bottom);
         height: 70px;
     }
-    
     .dock-item {
         padding: 8px 0; text-align: center; color: #666;
         font-size: 0.65rem; font-family: var(--font-mono);
         display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-        cursor: pointer;
     }
     .dock-item.active { color: var(--accent-primary); background: rgba(255,255,255,0.05); }
-    .dock-item span.material-symbols-outlined { font-size: 24px; }
 
-    /* --- ИСПРАВЛЕНИЯ КОНТЕНТА --- */
-    .main-viewport {
-        padding-top: 70px !important; /* Отступ сверху для шапки */
-        height: auto !important;
-    }
-    .view-section { padding: 20px 15px !important; }
-
-    /* --- ПРОФИЛЬ (Ваше фото) --- */
-    .profile-card {
-        grid-template-columns: 1fr !important; /* Одна колонка */
-        padding: 20px !important;
+    /* 3. ГОРИЗОНТАЛЬНЫЙ СВАЙП ДЛЯ ТАРИФОВ (Pricing) */
+    /* Превращаем сетку в ленту, которую можно листать пальцем влево */
+    .pricing-slider {
+        display: flex !important;           /* В строку */
+        flex-wrap: nowrap !important;       /* Не переносить */
+        overflow-x: auto !important;        /* Разрешить свайп */
         gap: 20px !important;
+        padding-bottom: 20px !important;    /* Место для пальца */
+        scroll-snap-type: x mandatory;      /* Прилипание карточек */
+        -webkit-overflow-scrolling: touch;  /* Плавность на iOS */
+    }
+    
+    /* Карточки внутри тарифов */
+    .pricing-slider > div {
+        min-width: 85vw !important;         /* Карточка занимает 85% ширины экрана */
+        scroll-snap-align: center;          /* Центрируется при свайпе */
+        margin-right: 10px;
+    }
+
+    /* 4. ПРОФИЛЬ И КАЛЬКУЛЯТОР */
+    .profile-card {
+        grid-template-columns: 1fr !important;
+        padding: 20px !important;
         background: rgba(20, 20, 25, 0.9) !important;
     }
-    .profile-photo {
-        height: 250px !important; /* Уменьшаем высоту фото */
-        width: 100% !important;
-        object-position: top center;
-    }
-    .profile-info h2 { font-size: 2rem !important; }
+    .profile-photo { height: 250px !important; object-position: top center; }
     
-    /* --- КАЛЬКУЛЯТОР (ROI) --- */
     .roi-grid {
-        grid-template-columns: 1fr !important; /* Одна колонка вместо двух */
+        grid-template-columns: 1fr !important;
         gap: 20px !important;
     }
     #roi-total { font-size: 2.5rem !important; word-break: break-all; }
-    input { font-size: 16px !important; } /* Фикс зума на iPhone */
 
-    /* --- МАТРИЦА И ТАБЫ (Чтобы двигались) --- */
+    /* 5. МАТРИЦА И СХЕМЫ (Тоже свайп) */
     .matrix-toggle, .pipeline-vis, #matrix-nav {
         display: flex !important;
-        flex-wrap: nowrap !important; /* Запрещаем перенос строк */
-        overflow-x: auto !important;  /* Разрешаем свайп влево-вправо */
-        padding-bottom: 10px;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
         justify-content: flex-start !important;
+        padding-bottom: 10px;
     }
-    /* Скрываем скроллбар, но оставляем свайп */
-    .matrix-toggle::-webkit-scrollbar, .pipeline-vis::-webkit-scrollbar { display: none; }
+    .m-btn, .dept-btn { flex: 0 0 auto; margin-right: 10px; }
     
-    .m-btn, .dept-btn { flex: 0 0 auto; margin-right: 10px; } /* Кнопки не сжимаются */
-    
-    /* Карточки кейсов */
-    .case-card { grid-template-columns: 1fr !important; }
-    .case-meta { border-right: none !important; border-bottom: 1px solid #333; }
-    
-    /* Модальные окна (политика) */
-    .doc-box { width: 95% !important; margin-bottom: 80px; }
+    /* Скрываем полосы прокрутки */
+    *::-webkit-scrollbar { display: none !important; }
 }
         /* SOCIAL ICONS STYLES */
     .social-block {
@@ -924,7 +927,7 @@
             <h2 style="margin-bottom:10px;">Уровни Доступа <span style="font-size:1rem; opacity:0.5; font-family:var(--font-mono)">// ACCESS LEVELS</span></h2>
             <p style="color:var(--text-muted); margin-bottom:40px;">Выберите формат работы: от простого бота до цифровой экосистемы.</p>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; align-items: start;">
+            <div class="pricing-slider" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; align-items: start;">
                 
                 <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 30px; position: relative; overflow: hidden; display: flex; flex-direction: column;">
                     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--accent-spec);"></div>
@@ -1717,6 +1720,7 @@ matrixApp.init();
 </body>
 
 </html>
+
 
 
 
