@@ -279,16 +279,22 @@
         transform: scale(0.95);
     }
 
-    /* 4. HERO СЕКЦИЯ */
+/* 4. HERO СЕКЦИЯ */
     #view-welcome {
         min-height: calc(100vh - 160px);
-        display: flex;
+        display: flex !important;
         align-items: center;
     }
     
     .hero-wrapper {
         background-position: center;
-        padding: 30px 20px;
+        padding: 30px 20px 120px 20px;
+        position: relative;
+        width: 100%;
+        min-height: calc(100vh - 160px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .hero-wrapper::before {
@@ -304,8 +310,10 @@
     
     .hero-content {
         position: relative;
-        z-index: 2;
-        padding-bottom: 40px;
+        z-index: 10;
+        padding-bottom: 160px;
+        width: 100%;
+        max-width: 500px;
     }
     
     .hero-title {
@@ -324,12 +332,23 @@
         padding: 16px 32px;
         font-size: 0.9rem;
         width: 100%;
-        max-width: 300px;
+        max-width: 100%;
+        display: block;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 100;
+        pointer-events: auto;
     }
     
     .tech-marquee-wrapper {
-        bottom: 90px;
+        position: fixed;
+        bottom: 80px;
+        left: 0;
+        width: 100%;
         padding: 12px 0;
+        z-index: 5;
+        background: rgba(5,5,7,0.95);
+        backdrop-filter: blur(10px);
     }
     
     .t-item {
@@ -2054,6 +2073,7 @@ matrixApp.init();
 </body>
 
 </html>
+
 
 
 
