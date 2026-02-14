@@ -1636,46 +1636,67 @@ function calcAiTest() {
 }
 
 const router = {
+    currentView: 'welcome', // Храним текущий активный вид
+    
     go: function(viewId, navEl) {
-        // 1. Переключаем экран
-        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-        const targetView = document.getElementById('view-' + viewId);
-        if(targetView) {
-            targetView.classList.add('active');
+        // Защита от повторного вызова
+        if(this.currentView === viewId) {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+            return;
         }
         
-        // 2. Обновляем десктопное меню
+        // 1. КРИТИЧНО: Убираем active со ВСЕХ секций
+        document.querySelectorAll('.view-section').forEach(el => {
+            el.classList.remove('active');
+            el.style.display = 'none'; // Принудительно скрываем
+        });
+        
+        // 2. Показываем ТОЛЬКО нужный блок
+        const targetView = document.getElementById('view-' + viewId);
+        if(targetView) {
+            targetView.style.display = ''; // Убираем inline стиль
+            targetView.classList.add('active');
+            this.currentView = viewId;
+        } else {
+            console.error('View not found:', viewId);
+            return;
+        }
+        
+        // 3. Обновляем десктопное меню
         document.querySelectorAll('.nav-menu .nav-item').forEach(el => el.classList.remove('active'));
         
-        // 3. Обновляем мобильное меню
+        // 4. Обновляем мобильное меню
         document.querySelectorAll('.mobile-dock .dock-item').forEach(el => el.classList.remove('active'));
         
-        // 4. Подсвечиваем правильный элемент
+        // 5. Подсвечиваем правильный элемент
         if(navEl) {
-            // Если передан элемент - подсвечиваем его
             navEl.classList.add('active');
         } else {
-            // Иначе ищем соответствующую кнопку в боковом меню
             const sidebarBtn = document.querySelector(`.nav-menu .nav-item[onclick*="'${viewId}'"]`);
             if(sidebarBtn) sidebarBtn.classList.add('active');
         }
         
-        // Всегда подсвечиваем соответствующую кнопку в мобильном меню
+        // 6. Подсвечиваем мобильную кнопку
         const mobileBtn = document.querySelector(`.mobile-dock .dock-item[onclick*="'${viewId}'"]`);
         if(mobileBtn) mobileBtn.classList.add('active');
 
-        // 5. Прокручиваем вверх
-        setTimeout(() => {
-            window.scrollTo({top: 0, behavior: 'instant'});
-            const viewport = document.querySelector('.main-viewport');
-            if(viewport) viewport.scrollTo({top: 0, behavior: 'instant'});
-        }, 10);
+        // 7. Прокрутка вверх
+        window.scrollTo({top: 0, behavior: 'instant'});
+        const viewport = document.querySelector('.main-viewport');
+        if(viewport) viewport.scrollTo({top: 0, behavior: 'instant'});
     }
 };
 
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
-    // Подсвечиваем первую кнопку в мобильном меню
+    // Скрываем все секции кроме активной
+    document.querySelectorAll('.view-section').forEach(el => {
+        if(!el.classList.contains('active')) {
+            el.style.display = 'none';
+        }
+    });
+    
+    // Подсвечиваем первую кнопку
     const firstMobileBtn = document.querySelector('.mobile-dock .dock-item');
     if(firstMobileBtn) firstMobileBtn.classList.add('active');
 });
@@ -2121,6 +2142,7 @@ matrixApp.init();
 </body>
 
 </html>
+
 
 
 
