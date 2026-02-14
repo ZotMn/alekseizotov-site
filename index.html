@@ -606,36 +606,45 @@
         padding: 20px !important;
     }
 
-    /* 10. РОАДМАП */
+/* 10. РОАДМАП */
     .roadmap-container {
-        padding-left: 10px;
+        padding-left: 0;
+        max-width: 100%;
     }
     
+    /* Скрываем вертикальную линию на мобильных */
     .roadmap-line {
-        left: 25px;
+        display: none;
     }
     
     .rm-step {
-        gap: 20px;
-        margin-bottom: 30px;
+        gap: 15px;
+        margin-bottom: 25px;
+        flex-direction: row;
+        align-items: flex-start;
     }
     
     .rm-icon {
-        width: 35px;
-        height: 35px;
-        font-size: 0.9rem;
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
+        flex-shrink: 0;
+        background: var(--accent-primary);
+        border: none;
+        box-shadow: 0 0 20px rgba(91, 108, 249, 0.4);
     }
     
     .rm-content {
-        padding: 18px;
+        padding: 20px;
+        flex: 1;
     }
     
     .rm-title {
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
     
     .rm-desc {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
     }
 
     /* 11. ТАРИФЫ */
@@ -2217,6 +2226,7 @@ matrixApp.init();
 </body>
 
 </html>
+
 
 
 
