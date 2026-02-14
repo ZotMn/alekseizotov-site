@@ -629,16 +629,19 @@
 /* 14. ОБЩИЕ УЛУЧШЕНИЯ */
     .view-section {
         padding: 25px 15px !important;
-        display: none !important;
-        position: relative;
     }
     
-    .view-section.active {
+    /* Принудительное переключение для мобильных */
+    .main-viewport .view-section {
+        display: none !important;
+    }
+    
+    .main-viewport .view-section.active {
         display: block !important;
     }
     
-    #view-welcome.active,
-    #view-profile.active {
+    .main-viewport #view-welcome.active,
+    .main-viewport #view-profile.active {
         display: flex !important;
     }
     
@@ -2163,6 +2166,7 @@ matrixApp.init();
 </body>
 
 </html>
+
 
 
 
