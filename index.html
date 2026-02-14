@@ -234,10 +234,11 @@
         box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
     
-    /* 3. НИЖНЕЕ МЕНЮ */
+/* 3. НИЖНЕЕ МЕНЮ С ГОРИЗОНТАЛЬНОЙ ПРОКРУТКОЙ */
     .mobile-dock {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
         background: linear-gradient(0deg, #050507 0%, rgba(5,5,7,0.98) 100%);
         border-top: 1px solid var(--glass-border);
         position: fixed;
@@ -245,10 +246,17 @@
         left: 0;
         width: 100%;
         z-index: 9999;
-        padding: 8px 0;
+        padding: 8px 10px;
         padding-bottom: max(8px, env(safe-area-inset-bottom));
         backdrop-filter: blur(10px);
         box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+        gap: 8px;
+    }
+    
+    .mobile-dock::-webkit-scrollbar {
+        display: none; /* Chrome, Safari */
     }
     
     .dock-item {
@@ -258,11 +266,14 @@
         justify-content: center;
         color: var(--text-muted);
         font-size: 0.65rem;
-        padding: 8px 4px;
+        padding: 8px 12px;
         cursor: pointer;
         transition: all 0.2s ease;
         font-weight: 600;
         gap: 4px;
+        flex-shrink: 0;
+        min-width: 70px;
+        white-space: nowrap;
     }
     
     .dock-item span.material-symbols-outlined {
@@ -271,8 +282,9 @@
     
     .dock-item.active {
         color: var(--accent-primary);
-        background: rgba(91, 108, 249, 0.1);
+        background: rgba(91, 108, 249, 0.15);
         border-radius: 12px;
+        box-shadow: 0 0 15px rgba(91, 108, 249, 0.3);
     }
     
     .dock-item:active {
@@ -870,17 +882,33 @@
         <span class="material-symbols-outlined">calculate</span>
         <span>Убытки</span>
     </div>
+    <div class="dock-item" onclick="router.go('profile', this)">
+        <span class="material-symbols-outlined">face</span>
+        <span>Профиль</span>
+    </div>
     <div class="dock-item" onclick="router.go('cases', this)">
         <span class="material-symbols-outlined">terminal</span>
         <span>Кейсы</span>
+    </div>
+    <div class="dock-item" onclick="router.go('roadmap', this)">
+        <span class="material-symbols-outlined">map</span>
+        <span>Схема</span>
     </div>
     <div class="dock-item" onclick="router.go('matrix', this)">
         <span class="material-symbols-outlined">hub</span>
         <span>Матрица</span>
     </div>
+    <div class="dock-item" onclick="router.go('pricing', this)">
+        <span class="material-symbols-outlined">monetization_on</span>
+        <span>Тарифы</span>
+    </div>
     <div class="dock-item" onclick="router.go('library', this)">
         <span class="material-symbols-outlined">library_books</span>
         <span>База</span>
+    </div>
+    <div class="dock-item" onclick="router.go('faq', this)">
+        <span class="material-symbols-outlined">help_center</span>
+        <span>FAQ</span>
     </div>
 </nav>
     <main class="main-viewport">
@@ -2093,6 +2121,7 @@ matrixApp.init();
 </body>
 
 </html>
+
 
 
 
