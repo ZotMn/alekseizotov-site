@@ -60,12 +60,12 @@
     .user-profile { margin-top: auto; padding: 15px; background: var(--glass-bg); border-radius: 12px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 10px; }
     .avatar-circle { width: 30px; height: 30px; background: #333; border-radius: 50%; }
 
-    /* MAIN VIEWPORT */
+/* MAIN VIEWPORT */
     .main-viewport { position: relative; overflow-y: auto; background: radial-gradient(circle at top right, rgba(91, 108, 249, 0.05), transparent 40%); padding: 0; }
-    .view-section { display: none; min-height: 100%; padding: 40px; animation: fadeIn 0.4s ease; }
-    .view-section.active { display: block; }
-    #view-welcome, #view-profile { padding: 0; display: none; height: 100%; }
-    #view-welcome.active, #view-profile.active { display: flex; }
+    .view-section { display: none !important; min-height: 100%; padding: 40px; animation: fadeIn 0.4s ease; }
+    .view-section.active { display: block !important; }
+    #view-welcome, #view-profile { padding: 0; }
+    #view-welcome.active, #view-profile.active { display: flex !important; }
     @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
 
     /* HERO */
@@ -2121,6 +2121,7 @@ matrixApp.init();
 </body>
 
 </html>
+
 
 
 
