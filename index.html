@@ -878,7 +878,151 @@
         margin: 0 auto 20px auto;
         box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
     }
+/* ===== DASHBOARD STYLES ===== */
+    #connections-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; }
+    .connection-line-base { stroke: rgba(255,255,255,0.03); stroke-width: 1.5; transition: stroke 0.4s, opacity 0.4s; }
+    .connection-line-flow { stroke: var(--accent-primary); stroke-width: 2.5; stroke-dasharray: 8 16; fill: none; opacity: 0; transition: opacity 0.3s; filter: drop-shadow(0 0 5px var(--accent-primary)); }
+    .connection-line-flow.active { opacity: 1; animation: dataStream 0.8s linear infinite; }
+    @keyframes dataStream { to { stroke-dashoffset: -24; } }
 
+    .map-section { position: relative; height: 700px; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+    .parallax-container { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; transition: transform 0.1s ease-out; z-index: 20; }
+    .map-wrapper { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+    .map-wrapper.shifted { transform: translateX(-16vw); }
+
+    .center-hub { position: relative; z-index: 50; width: 130px; height: 130px; background: radial-gradient(circle at 30% 30%, rgba(91,108,249,0.1), transparent); border: 2px solid rgba(91,108,249,0.3); border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; backdrop-filter: blur(12px); box-shadow: 0 0 50px rgba(91,108,249,0.12); transition: all 0.4s; }
+    .center-hub::before { content: ''; position: absolute; inset: -12px; border-radius: 50%; border: 1px dashed rgba(91,108,249,0.15); animation: spin 25s linear infinite; }
+    .center-hub::after { content: ''; position: absolute; inset: -24px; border-radius: 50%; border: 1px solid rgba(91,108,249,0.05); animation: spin 40s linear infinite reverse; }
+    .center-hub:hover { border-color: var(--accent-primary); box-shadow: 0 0 70px rgba(91,108,249,0.25); transform: scale(1.05); }
+    .center-hub svg { width: 30px; height: 30px; fill: none; stroke: var(--accent-primary); stroke-width: 1.5; margin-bottom: 5px; filter: drop-shadow(0 0 6px rgba(91,108,249,0.4)); }
+    .center-hub .hub-label { font-size: 0.7rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+    .center-hub .hub-count { font-family: var(--font-mono); font-size: 0.58rem; color: var(--accent-primary); margin-top: 2px; opacity: 0.7; }
+    .onboarding-hint { position: absolute; bottom: -48px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 0.7rem; color: var(--text-muted); opacity: 0; animation: fadeHint 1s ease 1.5s forwards; }
+    .onboarding-hint::before { content: '↑ '; color: var(--accent-primary); }
+    .center-hub.expanded .onboarding-hint { display: none; }
+    @keyframes fadeHint { to { opacity: 1; } }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes float { 0%, 100% { margin-top: 0; } 50% { margin-top: -5px; } }
+
+    .node { position: absolute; top: 50%; left: 50%; width: 96px; height: 96px; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; opacity: 0; transform: translate(-50%,-50%) scale(0); transition: all 0.8s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s, border-color 0.3s; z-index: 40; backdrop-filter: blur(12px); box-shadow: 0 6px 20px rgba(0,0,0,0.5); }
+    .node.active { opacity: 1; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1); }
+    .node:hover, .node.selected { background: rgba(15,16,20,0.95); border-color: var(--accent-primary); box-shadow: 0 0 28px rgba(91,108,249,0.2); z-index: 60; }
+    .node svg { width: 24px; height: 24px; fill: none; stroke: var(--text-muted); stroke-width: 1.5; transition: stroke 0.3s; }
+    .node:hover svg, .node.selected svg { stroke: var(--accent-primary); filter: drop-shadow(0 0 5px var(--accent-primary)); }
+    .node .label { font-size: 0.56rem; font-weight: 700; margin-top: 5px; text-transform: uppercase; letter-spacing: 0.3px; color: var(--text-muted); transition: color 0.3s; text-align: center; line-height: 1.15; max-width: 78px; }
+    .node:hover .label, .node.selected .label { color: #fff; }
+
+    .side-panel { position: fixed; top: 0; right: -700px; width: 560px; max-width: 100vw; height: 100vh; background: rgba(5,5,7,0.94); backdrop-filter: blur(40px); border-left: 1px solid var(--glass-border); box-shadow: -16px 0 60px rgba(0,0,0,0.7); transition: right 0.6s cubic-bezier(0.22,1,0.36,1); z-index: 10000; display: flex; flex-direction: column; }
+    .side-panel.open { right: 0; }
+    .panel-header { padding: 22px 28px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); flex-shrink: 0; }
+    .panel-header h2 { margin: 0; font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 10px; color:#fff; }
+    .panel-header svg { width: 22px; height: 22px; stroke: var(--accent-primary); filter: drop-shadow(0 0 5px rgba(91,108,249,0.3)); }
+    .panel-controls { display: flex; gap: 6px; }
+    .ctrl-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-muted); width: 34px; height: 34px; border-radius: 8px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.2s; }
+    .ctrl-btn:hover { background: var(--glass-active); color: #fff; border-color: rgba(255,255,255,0.15); }
+    .ctrl-btn.close:hover { color: var(--accent-alert); border-color: rgba(239,68,68,0.3); }
+    .ctrl-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .panel-tabs { display: flex; border-bottom: 1px solid var(--glass-border); padding: 0 28px; flex-shrink: 0; background: rgba(0,0,0,0.15); }
+    .panel-tab { padding: 13px 18px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; transition: 0.3s; }
+    .panel-tab:hover { color: var(--text-main); }
+    .panel-tab.active { color: var(--accent-primary); border-bottom-color: var(--accent-primary); }
+    .tab-count { font-family: var(--font-mono); font-size: 0.58rem; margin-left: 5px; background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 5px; }
+    .panel-tab.active .tab-count { background: rgba(91,108,249,0.12); color: var(--accent-primary); }
+    .panel-content { padding: 24px 28px; overflow-y: auto; flex: 1; text-align: left; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; animation: fadeUp 0.3s ease; }
+
+    .process-stepper { position: relative; padding-left: 26px; }
+    .process-stepper::before { content: ''; position: absolute; left: 4px; top: 8px; bottom: 16px; width: 2px; background: rgba(255,255,255,0.05); border-radius: 2px; }
+    .process-step { position: relative; padding-bottom: 18px; cursor: pointer; opacity: 0.45; transition: 0.3s; text-align:left; }
+    .process-step:hover { opacity: 0.75; }
+    .process-step.active { opacity: 1; }
+    .process-step::before { content: ''; position: absolute; left: -27px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--bg-core); border: 2px solid var(--text-muted); transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); z-index: 2; }
+    .process-step.active::before { background: var(--accent-primary); border-color: var(--accent-primary); box-shadow: 0 0 10px var(--accent-primary); transform: scale(1.2); }
+    .step-title { font-weight: 700; font-size: 0.92rem; transition: color 0.3s; color:#fff; }
+    .process-step.active .step-title { color: var(--accent-primary); }
+    .step-desc { max-height: 0; overflow: hidden; opacity: 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.55; transition: all 0.4s; }
+    .process-step.active .step-desc { max-height: 160px; opacity: 1; margin-top: 5px; }
+
+    .pain-card { background: rgba(239,68,68,0.03); border: 1px solid rgba(239,68,68,0.06); border-left: 3px solid var(--accent-alert); border-radius: 4px 10px 10px 4px; padding: 13px 16px; margin-bottom: 10px; display: flex; gap: 12px; align-items: flex-start; transition: 0.3s; text-align:left; }
+    .pain-card:hover { background: rgba(239,68,68,0.06); transform: translateX(3px); }
+    .pain-icon { color: var(--accent-alert); flex-shrink: 0; margin-top: 1px; }
+    .pain-title { font-weight: 700; font-size: 0.88rem; margin-bottom: 2px; color:#fff; }
+    .pain-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+
+    .ai-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 14px; padding: 18px; margin-bottom: 12px; transition: 0.4s; position: relative; overflow: hidden; text-align:left; }
+    .ai-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent-spec), transparent); opacity: 0.2; transition: opacity 0.4s; }
+    .ai-card:hover { border-color: rgba(16,185,129,0.25); box-shadow: 0 8px 24px -6px rgba(16,185,129,0.12); transform: translateY(-2px); }
+    .ai-card:hover::before { opacity: 1; }
+    .ai-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 10px; }
+    .ai-title-group { display: flex; align-items: center; gap: 10px; }
+    .ai-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; background: rgba(16,185,129,0.08); color: var(--accent-spec); border: 1px solid rgba(16,185,129,0.12); }
+    .ai-title { font-weight: 700; font-size: 0.92rem; color:#fff; }
+    .ai-effect { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.12); color: var(--accent-spec); padding: 3px 10px; border-radius: 14px; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 500; white-space: nowrap; }
+    .ai-desc { font-size: 0.84rem; color: var(--text-muted); margin: 0; line-height: 1.5; }
+
+    .panel-cta { padding: 20px 28px; border-top: 1px solid var(--glass-border); flex-shrink: 0; background: rgba(0,0,0,0.2); }
+    .panel-cta-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 15px; border: none; border-radius: 10px; background: var(--accent-primary); color: #fff; font-family: var(--font-main); font-size: 0.92rem; font-weight: 700; cursor: pointer; transition: 0.3s; text-decoration: none; box-shadow: 0 6px 20px rgba(91,108,249,0.3); }
+    .panel-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(91,108,249,0.45); }
+    .panel-cta-btn svg { width: 20px; height: 20px; fill: currentColor; }
+    .panel-cta-sub { text-align: center; font-size: 0.68rem; color: var(--text-muted); margin-top: 8px; }
+
+    .section-block { padding: 60px 24px; max-width: 960px; margin: 0 auto; text-align: left;}
+    .section-label { font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-primary); letter-spacing: 0.1em; margin-bottom: 8px; text-transform: uppercase; }
+    .section-title { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800; margin-bottom: 12px; line-height: 1.15; color:#fff;}
+    .section-desc { font-size: 1rem; color: var(--text-muted); max-width: 560px; line-height: 1.6; margin-bottom: 40px; }
+
+    .wins-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .win-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 28px; transition: 0.3s; position: relative; }
+    .win-card:hover { border-color: var(--accent-primary); transform: translateY(-4px); background: rgba(255,255,255,0.04); }
+    .win-num { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 500; color: var(--accent-primary); letter-spacing: 0.08em; margin-bottom: 14px; }
+    .win-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; color:#fff; }
+    .win-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; }
+    .win-metrics { display: flex; gap: 16px; flex-wrap: wrap; }
+    .win-metric { padding: 6px 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500; }
+    .win-metric.time { background: rgba(59,130,246,0.1); color: var(--accent-biz); border: 1px solid rgba(59,130,246,0.15); }
+    .win-metric.money { background: rgba(16,185,129,0.1); color: var(--accent-spec); border: 1px solid rgba(16,185,129,0.15); }
+
+    .steps-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .step-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 28px; text-align: center; transition: 0.3s; position: relative; }
+    .step-card:hover { border-color: var(--accent-primary); transform: translateY(-3px); }
+    .step-icon { width: 48px; height: 48px; margin: 0 auto 16px; border-radius: 14px; background: rgba(91,108,249,0.08); border: 1px solid rgba(91,108,249,0.15); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+    .step-num { font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-primary); letter-spacing: 0.1em; margin-bottom: 8px; }
+    .step-arrow { position: absolute; right: -22px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.15); font-size: 1.2rem; z-index: 2; }
+
+    .final-cta { text-align: center; padding: 60px 24px 80px; background: radial-gradient(ellipse at bottom, rgba(91,108,249,0.06), transparent 60%); }
+    .final-cta-btn { display: inline-flex; align-items: center; gap: 12px; padding: 20px 40px; background: var(--accent-primary); color: #fff; font-family: var(--font-main); font-weight: 800; font-size: 1.05rem; border: none; border-radius: 10px; cursor: pointer; transition: 0.3s; text-decoration: none; text-transform: uppercase; letter-spacing: 0.04em; box-shadow: 0 0 30px rgba(91,108,249,0.4); }
+    .final-cta-btn:hover { transform: translateY(-4px); box-shadow: 0 0 50px rgba(91,108,249,0.6); }
+    .final-cta-btn svg { width: 24px; height: 24px; fill: currentColor; }
+    .final-cta-sub { margin-top: 12px; font-size: 0.82rem; color: var(--text-muted); }
+
+    @media (max-width: 900px) {
+        .map-section { height: auto; padding: 20px 16px 40px; }
+        .parallax-container { position: relative; width: 100%; height: auto; transform: none !important; display: block; }
+        .map-wrapper { flex-direction: column; transform: none !important; gap: 0; }
+        .map-wrapper.shifted { transform: none !important; }
+        #connections-canvas { display: none; }
+        .center-hub { margin: 0 auto 20px; width: 100px; height: 100px; border-width: 1px; }
+        .center-hub::before, .center-hub::after { display: none; }
+        .center-hub svg { width: 24px; height: 24px; margin-bottom: 3px; }
+        .center-hub .hub-label { font-size: 0.6rem; }
+        .center-hub .hub-count { font-size: 0.5rem; }
+        .onboarding-hint { display: none; }
+        .node { position: relative !important; top: auto !important; left: auto !important; transform: none !important; opacity: 1 !important; width: 100%; max-width: 480px; height: auto; padding: 14px 18px; margin: 0 auto 8px; flex-direction: row; justify-content: flex-start; border-radius: 12px; animation: none !important; }
+        .node.active { transform: none !important; }
+        .node svg { margin-right: 14px; width: 26px; height: 26px; flex-shrink: 0; }
+        .node .label { margin-top: 0; font-size: 0.8rem; text-align: left; max-width: none; }
+        .side-panel { width: 100%; right: -100%; border-left: none; }
+        .panel-header { padding: 16px 18px; }
+        .panel-tabs { padding: 0 14px; overflow-x: auto; }
+        .panel-tab { padding: 11px 12px; font-size: 0.65rem; white-space: nowrap; }
+        .panel-content { padding: 18px 16px; }
+        .panel-cta { padding: 14px 16px; }
+        .steps-row { grid-template-columns: 1fr; }
+        .step-arrow { display: none; }
+        .module-hero { padding: 40px 20px 30px; }
+        .section-block { padding: 40px 20px; }
+    }
 </style>
 </head>
 <body>
@@ -904,6 +1048,9 @@
             </li>
             <li class="nav-item" onclick="router.go('roadmap', this)">
                 <span class="material-symbols-outlined nav-icon">map</span> Схема
+            </li>
+            <li class="nav-item" onclick="router.go('dashboard', this)">
+                <span class="material-symbols-outlined nav-icon">account_tree</span> Дашборд
             </li>
             <li class="nav-item" onclick="router.go('matrix', this)">
                 <span class="material-symbols-outlined nav-icon">hub</span> Матрица
@@ -1005,6 +1152,10 @@
     <div class="dock-item" onclick="router.go('roadmap', this)">
         <span class="material-symbols-outlined">map</span>
         <span>Схема</span>
+    </div>
+    <div class="dock-item" onclick="router.go('dashboard', this)">
+        <span class="material-symbols-outlined">account_tree</span>
+        <span>Дашборд</span>
     </div>
     <div class="dock-item" onclick="router.go('matrix', this)">
         <span class="material-symbols-outlined">hub</span>
@@ -1403,7 +1554,126 @@
                 <button class="hero-btn" onclick="window.open('https://t.me/zotov_coach_bot')">Начать с Диагностики</button>
             </div>
         </div>
+<div id="view-dashboard" class="view-section">
+            <div class="module-hero" style="text-align: center; padding: 20px 24px 40px; background: radial-gradient(ellipse at top, rgba(91,108,249,0.06), transparent 60%);">
+                <div style="display: inline-block; padding: 6px 14px; border: 1px solid rgba(91,108,249,0.3); border-radius: 4px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-primary); background: rgba(0,0,0,0.4); margin-bottom: 20px; letter-spacing: 0.08em;">// ИНТЕРАКТИВНАЯ ДЕМОНСТРАЦИЯ</div>
+                <h1 style="font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; line-height: 1.1; margin-bottom: 16px; background: linear-gradient(135deg, #fff 0%, #8b9bb4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Какие процессы в вашей компании<br>ИИ может взять на себя</h1>
+                <p style="font-size: 1.05rem; color: var(--text-muted); max-width: 640px; margin: 0 auto 24px; line-height: 1.6;">Реальный разбор производственного предприятия на 60 человек. Нажмите на любой отдел — увидите, где теряются часы и деньги, и как ИИ это решает.</p>
+                <div style="display: flex; justify-content: center; gap: 32px; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent-primary);"><span style="font-weight: 700; font-size: 1.3rem; color: #fff;">11</span> отделов</div>
+                    <div style="display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent-primary);"><span style="font-weight: 700; font-size: 1.3rem; color: #fff;">62</span> ИИ-решения</div>
+                    <div style="display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent-primary);"><span style="font-weight: 700; font-size: 1.3rem; color: #fff;">~40%</span> экономия времени</div>
+                </div>
+            </div>
 
+            <div class="map-section">
+                <svg id="connections-canvas"></svg>
+                <div class="parallax-container" id="parallax-container">
+                    <div class="map-wrapper" id="map-wrapper">
+                        <div class="center-hub" id="center-hub">
+                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                            <div class="hub-label">Завод</div>
+                            <div class="hub-count">11 отделов</div>
+                            <div class="onboarding-hint">Нажмите, чтобы раскрыть</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-block">
+                <div class="section-label">// быстрые победы</div>
+                <div class="section-title">С чего начать: 3 решения с максимальным ROI</div>
+                <div class="section-desc">Не нужно автоматизировать всё сразу. Эти три решения окупаются за первый месяц и не требуют перестройки процессов.</div>
+                <div class="wins-grid">
+                    <div class="win-card">
+                        <div class="win-num">01 — ОТДЕЛ ПРОДАЖ</div>
+                        <div class="win-title">Автогенерация коммерческих предложений</div>
+                        <div class="win-desc">ИИ берёт актуальные цены из 1С, рассчитывает скидку и формирует КП в фирменном шаблоне. Менеджер тратит 2 минуты вместо 40.</div>
+                        <div class="win-metrics">
+                            <span class="win-metric time">40 мин → 2 мин</span>
+                            <span class="win-metric money">~60 часов/мес экономии</span>
+                        </div>
+                    </div>
+                    <div class="win-card">
+                        <div class="win-num">02 — БЕЗОПАСНОСТЬ</div>
+                        <div class="win-title">Автопроверка контрагентов при заведении в CRM</div>
+                        <div class="win-desc">Новый клиент в Битрикс → автоматическая проверка по ЕГРЮЛ, арбитражу, ФССП → светофор: зелёный / жёлтый / красный.</div>
+                        <div class="win-metrics">
+                            <span class="win-metric time">60 мин → 3 мин</span>
+                            <span class="win-metric money">Защита от мошенников</span>
+                        </div>
+                    </div>
+                    <div class="win-card">
+                        <div class="win-num">03 — БУХГАЛТЕРИЯ</div>
+                        <div class="win-title">ИИ-обработка входящей первичной документации</div>
+                        <div class="win-desc">Скан или PDF от поставщика → OCR + извлечение данных → автосверка с заказом в 1С. Бухгалтер подтверждает, а не вбивает руками.</div>
+                        <div class="win-metrics">
+                            <span class="win-metric time">8 ч/день → 1 ч/день</span>
+                            <span class="win-metric money">0 ошибок в НДС</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-block" style="border-top: 1px solid var(--glass-border); padding-top: 60px;">
+                <div class="section-label">// процесс</div>
+                <div class="section-title">Как это работает</div>
+                <div class="section-desc">От первого контакта до работающего решения — три шага.</div>
+                <div class="steps-row">
+                    <div class="step-card">
+                        <div class="step-icon">🎯</div>
+                        <div class="step-num">ШАГ 01</div>
+                        <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 8px;">Диагностика</h3>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Бот задаёт вопросы о вашем бизнесе и определяет, где ИИ даст максимальный эффект. Занимает 5 минут.</p>
+                        <div class="step-arrow">→</div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon">🗺️</div>
+                        <div class="step-num">ШАГ 02</div>
+                        <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 8px;">Карта процессов</h3>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Разбираем ваши отделы по слоям: процессы → боли → решения. Вы получаете персональный план внедрения.</p>
+                        <div class="step-arrow">→</div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon">⚡</div>
+                        <div class="step-num">ШАГ 03</div>
+                        <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 8px;">Внедрение</h3>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Начинаем с «быстрых побед» — решений, которые окупаются за 2−4 недели. Без перестройки вашей инфраструктуры.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="final-cta">
+                <div class="section-label" style="text-align:center;">// следующий шаг</div>
+                <div class="section-title" style="text-align:center; margin-bottom:8px;">Узнайте, где ИИ сэкономит вам больше всего</div>
+                <p style="color:var(--text-muted); text-align:center; margin-bottom:32px; font-size:1rem;">5 минут в боте → персональный список решений для вашего бизнеса</p>
+                <a href="https://t.me/zotov_coach_bot" target="_blank" class="final-cta-btn">
+                    <svg viewBox="0 0 24 24"><path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-8.609 3.33c-2.068.8-4.133 1.598-5.724 2.21a405.15 405.15 0 0 1-2.849 1.09c-.42.147-.99.332-1.473.901-.728.855.074 1.69.399 1.938.478.364 1.097.66 1.636.916.515.243.967.477 1.285.655l2.403 7.727a1.472 1.472 0 0 0 1.408 1.099c.517 0 .882-.261 1.087-.462l2.956-2.79 4.058 3.09c.329.283.757.457 1.227.457 1.027 0 1.736-.845 1.903-1.725l2.837-15.126c.163-.784.004-1.482-.436-1.935a1.612 1.612 0 0 0-1.086-.59zM9.37 14.736l-.265 3.523-1.924-6.178 12.94-6.907-10.751 9.562z"/></svg>
+                    Запустить диагностику в Telegram
+                </a>
+                <div class="final-cta-sub">Бесплатно · 5 минут · Без звонков и спама</div>
+            </div>
+            
+            <div class="side-panel" id="side-panel">
+                <div class="panel-header">
+                    <h2 id="panel-title">Отдел</h2>
+                    <div class="panel-controls">
+                        <button class="ctrl-btn" id="prev-btn"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+                        <button class="ctrl-btn" id="next-btn"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+                        <button class="ctrl-btn close" id="close-btn"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                    </div>
+                </div>
+                <div class="panel-tabs" id="panel-tabs"></div>
+                <div class="panel-content" id="panel-content"></div>
+                <div class="panel-cta">
+                    <a href="https://t.me/zotov_coach_bot" target="_blank" class="panel-cta-btn" id="panel-cta-btn">
+                        <svg viewBox="0 0 24 24"><path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-8.609 3.33c-2.068.8-4.133 1.598-5.724 2.21a405.15 405.15 0 0 1-2.849 1.09c-.42.147-.99.332-1.473.901-.728.855.074 1.69.399 1.938.478.364 1.097.66 1.636.916.515.243.967.477 1.285.655l2.403 7.727a1.472 1.472 0 0 0 1.408 1.099c.517 0 .882-.261 1.087-.462l2.956-2.79 4.058 3.09c.329.283.757.457 1.227.457 1.027 0 1.736-.845 1.903-1.725l2.837-15.126c.163-.784.004-1.482-.436-1.935a1.612 1.612 0 0 0-1.086-.59zM9.37 14.736l-.265 3.523-1.924-6.178 12.94-6.907-10.751 9.562z"/></svg>
+                        <span id="cta-label">Пройти диагностику бизнеса</span>
+                    </a>
+                    <div class="panel-cta-sub">Бесплатный бот определит, где ИИ даст максимум пользы именно вам</div>
+                </div>
+            </div>
+        </div>
         <div id="view-matrix" class="view-section">
             <h2 style="margin-bottom:30px;">Матрица Решений <span style="font-size:1rem; opacity:0.5; margin-left:10px;">// DATABASE</span></h2>
             <div class="matrix-toggle">
@@ -2260,6 +2530,178 @@ matrixApp.init();
             }
         };
     });
+</script>
+<script>
+// ===== DASHBOARD ISOLATED LOGIC (UPDATED & BULLETPROOF) =====
+(() => {
+    const clean = (s) => s ? s.replace(/\[cite:\s*\d+\]/g, '').replace(/\[\+\]/g, '').trim() : '';
+
+    const D = [
+        { id:1, title:'Секретариат', icon:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>', layer1:["Приём звонков — ответ, квалификация, перевод на специалиста, фильтрация спама.","Документооборот — регистрация накладных, писем, журнал посетителей.","Помощь руководителю — календарь, совещания, оперативные поручения."], layer2:["Перегрузка линии — второй звонок сбрасывается, клиенты уходят.","Ошибки маршрутизации — звонок не в тот отдел.","Потеря данных — просьбы перезвонить забываются, статистики нет."], layer3:[{name:"ИИ-голосовой ассистент",desc:"Принимает все звонки, квалифицирует и маршрутизирует.",effect:"0% потерь"},{name:"Умный почтовый фильтр",desc:"Автораспределение входящих по отделам.",effect:"−70% рутины"},{name:"Виртуальный секретарь",desc:"Управление встречами и утренние сводки.",effect:"Прозрачность"},{name:"Дашборд аналитики",desc:"Нагрузка на линию, пиковые часы.",effect:"Точные метрики"}]},
+        { id:2, title:'Продажи', icon:'<rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>', layer1:["Первичный контакт — приём заявки, уточнение объёмов, сроков, региона.","Создание КП — расчёт стоимости, скидки, отправка.","Управление оплатами — резерв в 1С, счета, контроль.","Логистика — передача на склад, контроль отгрузки и ТК.","Дебиторка — прозвон клиентов с задолженностью.","CRM — статусы в Битрикс24, отчёты план/факт."], layer2:["КП вручную — до 40 минут на одно предложение.","Слепота по остаткам — звонки складу, неточные данные.","Зависшие деньги — забывают напоминать о долгах.","CRM для галочки — РОП не видит реальную картину.","Потеря фокуса — мелкие заявки вместо крупных клиентов."], layer3:[{name:"Генератор КП",desc:"Цены из 1С → готовое КП за 2 минуты.",effect:"40→2 мин"},{name:"Складской чат-бот",desc:"Моментальная проверка наличия в мессенджере.",effect:"Без звонков"},{name:"Робот-коллектор",desc:"Цепочка SMS и звонков для возврата долгов.",effect:"−50% просрочки"},{name:"Скоринг клиентов",desc:"Ранжирование по потенциальной прибыли.",effect:"Фокус"},{name:"ИИ-транскрибатор",desc:"Запись звонка → автозаполнение CRM.",effect:"−80% ввода"},{name:"Дашборд продаж",desc:"План/факт, ABC-анализ в реальном времени.",effect:"Отчёты за 0 мин"}]},
+        { id:3, title:'Юристы', icon:'<path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>', layer1:["Контракты — шаблоны, вычитка правок, реестр, пролонгация.","Споры — досудебные претензии, ответы на жалобы, иски.","Сертификация — сроки деклараций, техрегламентов, СГР."], layer2:["Вычитка — 2−4 часа на каждый входящий договор.","Устаревшие реестры — просрочка сертификатов.","Рутинные иски — типовые документы с нуля."], layer3:[{name:"Нейро-аудит договоров",desc:"Загрузка PDF → все риски за 30 минут.",effect:"4ч→30мин"},{name:"Конструктор документов",desc:"Типовые контракты по анкете без юриста.",effect:"−90% рутины"},{name:"Трекер сертификатов",desc:"Уведомления за 30/14/7 дней до истечения.",effect:"0 просрочек"},{name:"Авто-претензии",desc:"Генерация писем из данных 1С.",effect:"1ч→10мин"},{name:"Сканер этикеток",desc:"Сверка с требованиями законодательства.",effect:"Защита от штрафов"}]},
+        { id:4, title:'Безопасность', icon:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>', layer1:["Проверка контрагентов — ЕГРЮЛ, арбитраж, ФССП, связи.","Аудит персонала — судимости, долги, предыдущие места.","Внутренний контроль — хищения, откаты, утечки.","СКУД — пропускной режим на производство и склад."], layer2:["Ручная проверка — 5−7 сайтов, 30−60 мин на контрагента.","Реактивность — узнают после нанесения ущерба.","Мёртвый видеоархив — некому отсматривать."], layer3:[{name:"Автопроверка",desc:"Скоринг контрагента при заведении в CRM.",effect:"60→3 мин"},{name:"HR-светофор",desc:"Риск-факторы по кандидатам при найме.",effect:"−70% работы"},{name:"Поиск аномалий",desc:"Анализ складских движений и ночных отгрузок.",effect:"Раннее обнаружение"},{name:"Аудит закупок",desc:"Сравнение цен со средними рыночными.",effect:"Экономия млн"},{name:"Радар контрафакта",desc:"Парсинг маркетплейсов на копирование.",effect:"Защита бренда"},{name:"Видео-аналитика",desc:"Нейросеть на камерах: нарушения, вынос.",effect:"24/7 контроль"}]},
+        { id:5, title:'Кадры', icon:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>', layer1:["Найм — вакансии на HH/Авито, скрининг, интервью.","Оформление — договоры, приказы, медкомиссия, ТБ.","Учёт — графики, больничные, отпуска, табель.","Аттестация — ОТ, промбезопасность, контроль сроков."], layer2:["Текучка — 3−5 дней на найм, человек уходит через месяц.","Бумаги — 10−15 документов на каждый приём.","Медосмотры — штраф до 130 тыс. за пропуск."], layer3:[{name:"Цифровой рекрутер",desc:"Автопарсинг резюме + дозвон голосовым ботом.",effect:"100→10 кандидатов"},{name:"Пакет документов",desc:"Ввод данных → полный пакет за 15 мин.",effect:"2ч→15мин"},{name:"HR-трекер",desc:"Алерты: медосмотры, аттестации, испытательные.",effect:"0 штрафов"},{name:"Генератор смен",desc:"Графики с учётом ТК и пожеланий.",effect:"−80% конфликтов"},{name:"Аналитика текучести",desc:"Паттерны увольнений по отделам.",effect:"Цифры vs ощущения"}]},
+        { id:6, title:'Закупки', icon:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>', layer1:["Расчёт потребности — ПАВы, спирты, тара под план.","Вендоры — КП, торги, годовые контракты.","Запасы — неснижаемый запас для непрерывности.","Сертификация сырья — паспорта качества.","Себестоимость — поиск выгодных аналогов."], layer2:["Ошибки в Excel — нехватка сырья в момент варки.","Мониторинг цен — не успевают следить.","Откаты — переплата 10−15% годами."], layer3:[{name:"Калькулятор сырья",desc:"Рецепты + планы + транзит = точная заявка.",effect:"4ч→5мин"},{name:"Парсер цен",desc:"Биржевые котировки и прайсы конкурентов.",effect:"Экономия млн"},{name:"Авто-точка заказа",desc:"Момент закупки с учётом сезонности.",effect:"0 дефицитов"},{name:"Трекер логистики",desc:"Алерты о срывах сроков доставки.",effect:"Проактивность"},{name:"Антикоррупционный бот",desc:"Отклонения от рыночных цен.",effect:"Прозрачность"}]},
+        { id:7, title:'Производство', icon:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>', layer1:["Планирование — очередь варки, минимизация промывок.","Техкарты — пропорции, температура, pH.","Линии — дозирование, фасовка, упаковка.","Сервис — насосы, дозаторы, линии розлива.","Учёт и ОТ — списание, брак, ПДК, вентиляция."], layer2:["Ручное планирование — срочный заказ ломает график, 2−3 ч простоев.","Ошибки рецептур — устаревшие версии → брак.","Поломки — ТО делается «когда время», линия встаёт.","Нет прозрачности — директор узнаёт из отчётов."], layer3:[{name:"Нейро-диспетчер",desc:"Перестройка расписания при срочных заказах.",effect:"−30−40% простоев"},{name:"Цифровые рецептуры",desc:"Планшет оператора с подтверждением шагов.",effect:"0 брака"},{name:"Штрихкодирование",desc:"Автосписание сырья, контроль перерасхода.",effect:"99%+ точность"},{name:"Предиктивный сервис",desc:"Датчики → прогноз поломок до аварии.",effect:"−50−70% аварий"},{name:"ИИ-контроль качества",desc:"Анализ смесей на лету, предупреждение.",effect:"Спасение партий"},{name:"Дашборд директора",desc:"Цифровой двойник: статус линий онлайн.",effect:"Полный контроль"}]},
+        { id:8, title:'Финансы', icon:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>', layer1:["Первичка — 50−100 документов/день в 1С.","Себестоимость — калькуляция с партионным учётом.","ЗП — 60+ чел., смены, ночные, праздничные.","Ликвидность — платежи, бюджеты, БДДС."], layer2:["Ручной ввод — 8 ч/день, ошибки с НДС.","Маржа с задержкой — фактическая через 2−3 недели.","Кассовые разрывы — Excel провоцирует нехватку."], layer3:[{name:"OCR-нейросеть",desc:"Скан первички → авто-проводки.",effect:"8ч→1ч"},{name:"Онлайн-маржа",desc:"Себестоимость в реальном времени.",effect:"Решения сейчас"},{name:"Авто-расчёт ЗП",desc:"СКУД + тарифы = безошибочная ведомость.",effect:"0 ошибок"},{name:"Фин. трекер",desc:"Прогноз потока, предупреждение разрывов.",effect:"0 разрывов"},{name:"Панель рентабельности",desc:"Прибыльность по клиентам и продуктам.",effect:"Аналитика ежедневно"}]},
+        { id:9, title:'Склад', icon:'<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>', layer1:["Приёмка — разгрузка, пересчёт, образцы для ОТК.","Хранение — ЛВЖ отдельно, FIFO, контроль сроков.","Комплектация — сборка заказов, маркировка.","Отгрузка — ТТН, ТК, отслеживание.","Инвентаризация — сверка с 1С, списание."], layer2:["Ошибки приёмки — расхождения через месяц.","FIFO не работает — списания на сотни тысяч.","Ошибки сборки — возвраты, двойные транспортные.","Остатки не совпадают — в 1С одно, на складе другое."], layer3:[{name:"Цифровая приёмка",desc:"Сканирование + автосверка с заказом.",effect:"0 ошибок"},{name:"Умное размещение",desc:"ИИ указывает ячейку: соседство + FIFO.",effect:"Безопасность"},{name:"Автокомплектация",desc:"Маршрут на ТСД, подтверждение сканом.",effect:"+30−40% скорость"},{name:"Остатки онлайн",desc:"Каждое движение мгновенно в 1С.",effect:"100% точность"},{name:"Мониторинг сроков",desc:"Ежедневная проверка, приоритетное использование.",effect:"−70% списаний"},{name:"Оптимизация ТК",desc:"Консолидация заказов, сравнение тарифов.",effect:"−15−20% доставка"}]},
+        { id:10, title:'ОТК', icon:'<polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>', layer1:["Входной контроль — pH, плотность, активное вещество.","Контроль производства — вязкость, % спирта.","Готовая продукция — анализы, тара, этикетка.","Документация — протоколы, паспорта, поверка."], layer2:["Бумажные протоколы — поиск часами.","Нет прослеживаемости — не связать партию с сырьём.","Нет анализа трендов — pH ползёт к границе."], layer3:[{name:"Электронные протоколы",desc:"Полная цепочка: сырьё→продукция→клиент.",effect:"Поиск за 10 сек"},{name:"Анализатор дрейфа",desc:"Тренды параметров до выхода за допуск.",effect:"Предотвращение брака"},{name:"Журнал поверок",desc:"Автонапоминания о калибровке.",effect:"0 просрочек"},{name:"Блок рекламаций",desc:"Вся история по номеру партии.",effect:"Недели→часы"},{name:"Предиктивный рецепт",desc:"Подсказки по корректировке варки.",effect:"↓ % брака"}]},
+        { id:11, title:'IT-отдел', icon:'<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>', layer1:["Helpdesk — принтеры, пароли, терминалы.","Инфраструктура — серверы, сеть, телефония.","1С и Битрикс — обновления, права, интеграции.","Безопасность — защита рецептур и клиентской базы."], layer2:["Один на всё — тонет в однотипных запросах.","1С — дорогие доработки, риск при обновлениях.","Пароли на стикерах — бэкапы нерегулярно."], layer3:[{name:"Умный чат-бот",desc:"Типовые запросы + инструкции автоматически.",effect:"−60−70% нагрузки"},{name:"Автомониторинг",desc:"Серверы, диски, бэкапы: алерты до падения.",effect:"Проактивность"},{name:"Единая шина",desc:"1С + Битрикс + склад = синхронность.",effect:"Единая система"},{name:"ИИ-помощник 1С",desc:"Ускорение интеграций и запросов.",effect:"−50% аутсорса"},{name:"Аудитор безопасности",desc:"Контроль бэкапов, подозрительная активность.",effect:"Защита данных"}]}
+    ];
+
+    const mapWrapper = document.getElementById('map-wrapper'),
+          parallax = document.getElementById('parallax-container'),
+          hub = document.getElementById('center-hub'),
+          panel = document.getElementById('side-panel'),
+          pTitle = document.getElementById('panel-title'),
+          pTabs = document.getElementById('panel-tabs'),
+          pContent = document.getElementById('panel-content'),
+          closeBtn = document.getElementById('close-btn'),
+          prevBtn = document.getElementById('prev-btn'),
+          nextBtn = document.getElementById('next-btn'),
+          ctaLabel = document.getElementById('cta-label'),
+          svg = document.getElementById('connections-canvas');
+
+    if(!mapWrapper || !hub) return; // Защита от ошибок
+
+    let expanded = false, activeNode = null, curIdx = -1, lBase = [], lFlow = [], aTab = 'processes';
+    const myNodes = []; // Жесткая привязка элементов
+
+    D.forEach((d, i) => {
+        const n = document.createElement('div'); 
+        n.className = 'node';
+        n.style.animation = `float ${3+Math.random()*2}s ease-in-out ${Math.random()*2}s infinite`;
+        n.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">${d.icon}</svg><div class="label">${clean(d.title)}</div>`;
+        const r = window.innerWidth < 768 ? 160 : 260, a = (i/D.length)*2*Math.PI - Math.PI/2;
+        n.style.setProperty('--x', `${Math.cos(a)*r}px`); 
+        n.style.setProperty('--y', `${Math.sin(a)*r}px`);
+        
+        n.addEventListener('click', e => { e.stopPropagation(); openPanel(d, n, i); });
+        
+        mapWrapper.appendChild(n);
+        myNodes.push(n); // Сохраняем элемент сразу в память
+
+        const lb = document.createElementNS('http://www.w3.org/2000/svg','line'); lb.setAttribute('class','connection-line-base'); svg.appendChild(lb); lBase.push({el:lb});
+        const lf = document.createElementNS('http://www.w3.org/2000/svg','line'); lf.setAttribute('class','connection-line-flow'); svg.appendChild(lf); lFlow.push({el:lf});
+    });
+
+    document.addEventListener('mousemove', e => {
+        if(window.innerWidth < 768 || !parallax) return;
+        parallax.style.transform = `translate(${(window.innerWidth/2 - e.clientX)*0.02}px, ${(window.innerHeight/2 - e.clientY)*0.02}px)`;
+        if(expanded) updateLines();
+    });
+
+    function updateLines() {
+        if(!expanded || window.innerWidth < 768) {
+            lBase.forEach(l => l.el.style.opacity = '0');
+            lFlow.forEach(l => l.el.style.opacity = '0');
+            return;
+        }
+        if(!hub) return;
+        const hr = hub.getBoundingClientRect();
+        if(hr.width === 0) return; 
+        
+        const cx = hr.left + hr.width/2, cy = hr.top + hr.height/2;
+        lBase.forEach((l, i) => {
+            const nr = myNodes[i].getBoundingClientRect(), nx = nr.left + nr.width/2, ny = nr.top + nr.height/2;
+            l.el.setAttribute('x1', cx); l.el.setAttribute('y1', cy); l.el.setAttribute('x2', nx); l.el.setAttribute('y2', ny); l.el.style.opacity = '1';
+            lFlow[i].el.setAttribute('x1', cx); lFlow[i].el.setAttribute('y1', cy); lFlow[i].el.setAttribute('x2', nx); lFlow[i].el.setAttribute('y2', ny);
+        });
+    }
+    window.addEventListener('resize', updateLines);
+
+    // НАДЕЖНЫЙ ОБРАБОТЧИК КЛИКА ПО ХАБУ
+    hub.addEventListener('click', e => {
+        e.stopPropagation();
+        expanded = !expanded;
+        hub.classList.toggle('expanded', expanded);
+        
+        myNodes.forEach((n, i) => {
+            setTimeout(() => {
+                expanded ? n.classList.add('active') : n.classList.remove('active');
+                requestAnimationFrame(updateLines);
+            }, i * 30);
+        });
+        
+        if(!expanded) closePanel_();
+    });
+
+    // Для мобилок раскрываем сразу
+    if(window.innerWidth <= 900) {
+        myNodes.forEach(n => n.classList.add('active'));
+        expanded = true;
+        hub.classList.add('expanded');
+    }
+
+    // UI Helpers
+    function gStep(items){return '<div class="process-stepper">'+items.map((it,i)=>{const c=clean(it),p=c.split(' — ');return `<div class="process-step ${i===0?'active':''}" onclick="tStep(this)"><div class="step-title">${p[0]}</div><div class="step-desc">${p.slice(1).join(' — ')}</div></div>`;}).join('')+'</div>';}
+    window.tStep=function(el){el.parentElement.querySelectorAll('.process-step').forEach(s=>s.classList.remove('active'));el.classList.add('active');};
+    function gPain(items){return items.map(it=>{const c=clean(it),p=c.split(' — '),t=p.length>1?p[0]:'Проблема',d=p.length>1?p.slice(1).join(' — '):c;return `<div class="pain-card"><div class="pain-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div><div class="pain-title">${t}</div><div class="pain-desc">${d}</div></div></div>`;}).join('');}
+    function gAI(sols){return sols.map(s=>`<div class="ai-card"><div class="ai-header"><div class="ai-title-group"><div class="ai-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="ai-title">${clean(s.name)}</div></div><span class="ai-effect">${clean(s.effect)}</span></div><p class="ai-desc">${clean(s.desc)}</p></div>`).join('');}
+
+    function renderTabs(d){
+        const c={p:d.layer1.length,b:d.layer2.length,a:d.layer3.length};
+        pTabs.innerHTML=[{id:'processes',l:'⚙️ Процессы',c:c.p},{id:'pains',l:'⚠️ Боли',c:c.b},{id:'ai',l:'✨ ИИ-решения',c:c.a}].map(t=>`<div class="panel-tab ${aTab===t.id?'active':''}" data-tab="${t.id}">${t.l}<span class="tab-count">${t.c}</span></div>`).join('');
+        pTabs.querySelectorAll('.panel-tab').forEach(tab=>{
+            tab.addEventListener('click',()=>{
+                aTab=tab.dataset.tab;
+                pTabs.querySelectorAll('.panel-tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');
+                pContent.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+                pContent.querySelector(`[data-pane="${aTab}"]`).classList.add('active');
+            });
+        });
+    }
+
+    function openPanel(d,el,idx){
+        curIdx=idx; myNodes.forEach(n=>n.classList.remove('selected')); el.classList.add('selected');
+        lFlow.forEach(l=>l.el.classList.remove('active')); lBase.forEach(l=>l.el.style.stroke='rgba(255,255,255,0.03)');
+        if(lFlow[idx])lFlow[idx].el.classList.add('active'); if(lBase[idx])lBase[idx].el.style.stroke='rgba(91,108,249,0.2)';
+        if(window.innerWidth>900)mapWrapper.classList.add('shifted');
+        pTitle.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d.icon}</svg>${clean(d.title)}`;
+        ctaLabel.textContent=`Диагностика: ${clean(d.title)}`;
+        aTab='processes'; renderTabs(d);
+        pContent.innerHTML=`<div class="tab-pane active" data-pane="processes">${gStep(d.layer1)}</div><div class="tab-pane" data-pane="pains">${gPain(d.layer2)}</div><div class="tab-pane" data-pane="ai">${gAI(d.layer3)}</div>`;
+        panel.classList.add('open'); activeNode=el; pContent.scrollTop=0;
+        setTimeout(updateLines,50);setTimeout(updateLines,300);
+    }
+
+    function closePanel_(){
+        panel.classList.remove('open');mapWrapper.classList.remove('shifted');
+        lFlow.forEach(l=>l.el.classList.remove('active'));lBase.forEach(l=>l.el.style.stroke='rgba(255,255,255,0.03)');
+        if(activeNode)activeNode.classList.remove('selected');curIdx=-1;
+        setTimeout(updateLines,50);setTimeout(updateLines,300);
+    }
+    
+    if(closeBtn) closeBtn.addEventListener('click', closePanel_);
+    if(prevBtn) prevBtn.addEventListener('click', () => {if(curIdx<0)return; const i=(curIdx-1+D.length)%D.length; openPanel(D[i],myNodes[i],i);});
+    if(nextBtn) nextBtn.addEventListener('click', () => {if(curIdx<0)return; const i=(curIdx+1)%D.length; openPanel(D[i],myNodes[i],i);});
+
+    // Наблюдатель (чтобы узлы красиво вылетали при открытии вкладки)
+    const observer = new IntersectionObserver((entries) => {
+        if(entries[0].isIntersecting) {
+            setTimeout(updateLines, 50);
+            setTimeout(updateLines, 300);
+            
+            // Авто-раскрытие для десктопа в первый раз (безопасный метод)
+            if (window.innerWidth > 900 && !expanded && !window.dashboardAutoOpened) {
+                window.dashboardAutoOpened = true;
+                expanded = true;
+                hub.classList.add('expanded');
+                myNodes.forEach((n, i) => {
+                    setTimeout(() => {
+                        n.classList.add('active');
+                        requestAnimationFrame(updateLines);
+                    }, i * 30);
+                });
+            }
+        }
+    });
+    
+    const dashView = document.getElementById('view-dashboard');
+    if(dashView) observer.observe(dashView);
+
+})();
 </script>
 </body>
 
