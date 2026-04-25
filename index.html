@@ -4,29 +4,41 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Алексей Зотов | Бизнес-коуч ICF и внедрение AI-автоматизации (n8n)</title>
-<meta name="description" content="Системный бизнес-коучинг для предпринимателей. Устранение хаоса в процессах, разработка цифровых двойников и автоматизация рутины на базе n8n и ИИ. Запишитесь на диагностику." />    
+<meta name="description" content="Системный бизнес-коучинг для предпринимателей. Устранение хаоса в процессах, разработка цифровых двойников и автоматизация рутины на базе n8n и ИИ. Запишитесь на диагностику." />
+<link rel="canonical" href="https://alekseizotov.online/" />
+<meta property="og:title" content="Алексей Зотов | Бизнес-коуч ICF и AI-автоматизация на n8n" />
+<meta property="og:description" content="Системный коучинг и автоматизация бизнеса. Устраняем хаос, внедряем n8n и ИИ. Бесплатная диагностика." />
+<meta property="og:image" content="https://alekseizotov.online/me.jpg" />
+<meta property="og:url" content="https://alekseizotov.online/" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Алексей Зотов | Бизнес-коуч ICF и AI-автоматизация" />
+<meta name="twitter:description" content="Системный коучинг и автоматизация бизнеса на n8n и ИИ." />
+<meta name="twitter:image" content="https://alekseizotov.online/me.jpg" />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 
 <style>
     :root {
-        --bg-core: #050507;
-        --bg-sidebar: #0f1014;
-        
-        --glass-bg: rgba(255, 255, 255, 0.03);
-        --glass-border: rgba(255, 255, 255, 0.08);
-        --glass-active: rgba(255, 255, 255, 0.08);
-        
-        /* Accents */
-        --accent-primary: #5b6cf9;
-        --accent-biz: #3b82f6;
-        --accent-spec: #10b981;
-        --accent-life: #8b5cf6;
-        --accent-alert: #ef4444;
-        --accent-warn: #f59e0b;
-        
-        --text-main: #ffffff;
-        --text-muted: #8b9bb4;
+        /* SOFT THEME — тёплый тёмно-синий вместо чёрного */
+        --bg-core: #0d1017;
+        --bg-sidebar: #131720;
+
+        --glass-bg: rgba(255, 255, 255, 0.055);
+        --glass-border: rgba(255, 255, 255, 0.13);
+        --glass-active: rgba(255, 255, 255, 0.10);
+
+        /* Accents — чуть насыщеннее */
+        --accent-primary: #6b7df9;
+        --accent-biz: #4d9af5;
+        --accent-spec: #1ec98a;
+        --accent-life: #9d6ef5;
+        --accent-alert: #f05252;
+        --accent-warn: #fbbf24;
+
+        /* Текст — теплее, не слепит */
+        --text-main: #eef0f8;
+        --text-muted: #9cadc8;
         --font-main: 'Manrope', sans-serif;
         --font-mono: 'JetBrains Mono', monospace;
     }
@@ -43,26 +55,27 @@
 
     /* SCROLLBAR */
     ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+    ::-webkit-scrollbar-thumb { background: rgba(107,125,249,0.25); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(107,125,249,0.4); }
 
     /* LAYOUT */
     .app-container { display: grid; grid-template-columns: 260px 1fr; height: 100vh; }
 
     /* SIDEBAR */
-    .sidebar { background: var(--bg-sidebar); border-right: 1px solid var(--glass-border); display: flex; flex-direction: column; padding: 30px 15px; z-index: 10; }
-    .logo-area { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; color: var(--accent-primary); margin-bottom: 30px; padding-left: 10px; display: flex; align-items: center; gap: 8px; opacity: 0.8; }
-    .nav-menu { list-style: none; flex: 1; display: flex; flex-direction: column; gap: 5px; }
-    .nav-item { padding: 12px 15px; border-radius: 10px; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; gap: 12px; transition: 0.2s; font-weight: 600; font-size: 0.9rem; }
+    .sidebar { background: var(--bg-sidebar); border-right: 1px solid var(--glass-border); display: flex; flex-direction: column; padding: 20px 15px; z-index: 10; overflow-y: auto; scrollbar-width: none; }
+    .sidebar::-webkit-scrollbar { display: none; }
+    .logo-area { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; color: var(--accent-primary); margin-bottom: 20px; padding-left: 10px; display: flex; align-items: center; gap: 8px; opacity: 0.8; }
+    .nav-menu { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; }
+    .nav-item { padding: 9px 15px; border-radius: 10px; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; gap: 12px; transition: 0.2s; font-weight: 600; font-size: 0.85rem; }
     .nav-item:hover { background: var(--glass-bg); color: #fff; }
     .nav-item.active { background: var(--glass-active); color: #fff; border: 1px solid var(--glass-border); }
     .nav-icon { font-size: 20px; }
-    .user-profile { margin-top: auto; padding: 15px; background: var(--glass-bg); border-radius: 12px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 10px; }
+    .user-profile { margin-top: 10px; padding: 12px; background: var(--glass-bg); border-radius: 12px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 10px; }
     .avatar-circle { width: 30px; height: 30px; background: #333; border-radius: 50%; }
 
 /* MAIN VIEWPORT */
-    .main-viewport { position: relative; overflow-y: auto; background: radial-gradient(circle at top right, rgba(91, 108, 249, 0.05), transparent 40%); padding: 0; }
+    .main-viewport { position: relative; overflow-y: auto; background: radial-gradient(ellipse at 70% 0%, rgba(107, 125, 249, 0.10) 0%, rgba(13, 16, 23, 0) 60%), radial-gradient(ellipse at 10% 90%, rgba(30, 201, 138, 0.06) 0%, transparent 50%); padding: 0; }
     .view-section { display: none !important; min-height: 100%; padding: 40px; animation: fadeIn 0.4s ease; }
     .view-section.active { display: block !important; }
     #view-welcome, #view-profile { padding: 0; }
@@ -70,23 +83,23 @@
     @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
 
     /* HERO */
-    .hero-wrapper { width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center; background-image: linear-gradient(rgba(5,5,7,0.85), rgba(5,5,7,0.7)), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; }
-    .hero-content { text-align: center; max-width: 900px; padding: 20px 20px 100px 20px; z-index: 2; }
+    .hero-wrapper { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background-image: linear-gradient(rgba(13,16,23,0.75), rgba(13,16,23,0.55)), url('assets/фон сайта.png'); background-size: cover; background-position: center; }
+    .hero-content { text-align: center; max-width: 900px; padding: 40px 20px 40px 20px; z-index: 2; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .sys-tag { display: inline-block; padding: 6px 12px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-primary); margin-bottom: 20px; background: rgba(0,0,0,0.5); }
     .hero-title { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 30px; text-transform: uppercase; }
     .hero-desc { font-size: 1.2rem; color: #ccc; max-width: 700px; margin: 0 auto 40px auto; line-height: 1.6; }
-    .hero-btn { padding: 20px 40px; background: var(--accent-primary); color: #fff; font-weight: 700; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 0.05em; box-shadow: 0 0 30px rgba(91, 108, 249, 0.4); }
+    .hero-btn { padding: 22px 70px; background: var(--accent-primary); color: #fff; font-weight: 700; border: none; border-radius: 10px; font-size: 1.15rem; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 0.08em; box-shadow: 0 0 40px rgba(107, 125, 249, 0.45); min-width: 320px; }
     .hero-btn:hover { transform: translateY(-5px); box-shadow: 0 0 50px rgba(91, 108, 249, 0.6); }
 
     /* NEW STYLES FOR MARQUEE */
-    .tech-marquee-wrapper { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(5,5,7,0.8); border-top: 1px solid var(--glass-border); padding: 15px 0; overflow: hidden; z-index: 5; }
+    .tech-marquee-wrapper { width: 100%; background: rgba(5,5,7,0.85); border-top: 1px solid var(--glass-border); padding: 13px 0; overflow: hidden; z-index: 5; flex-shrink: 0; }
     .tech-track { display: flex; gap: 50px; white-space: nowrap; animation: scrollText 20s linear infinite; }
     .t-item { font-family: var(--font-mono); font-weight: 700; color: var(--text-muted); opacity: 0.7; letter-spacing: 1px; }
     @keyframes scrollText { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
     /* PROFILE */
     .profile-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-image: linear-gradient(rgba(5,5,7,0.9), rgba(5,5,7,0.8)), url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; padding: 40px; overflow-y: auto; }
-    .profile-card { display: grid; grid-template-columns: 1fr 1.5fr; gap: 50px; max-width: 1200px; width: 100%; background: rgba(20, 20, 25, 0.6); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 30px; padding: 50px; }
+    .profile-card { display: grid; grid-template-columns: 1fr 1.5fr; gap: 50px; max-width: 1200px; width: 100%; background: rgba(22, 27, 40, 0.75); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 30px; padding: 50px; }
     .profile-visual { display: flex; flex-direction: column; gap: 20px; }
     .profile-photo { width: 100%; height: 450px; object-fit: cover;object-position: top; border-radius: 20px; border: 1px solid var(--glass-border); filter: grayscale(10%); }
     .badges-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -129,6 +142,8 @@
     .rm-tag { font-size: 0.7rem; padding: 4px 10px; border-radius: 20px; background: rgba(255,255,255,0.1); color: var(--text-muted); text-transform: uppercase; }
     .rm-desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; }
     .rm-artifact { margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--glass-border); font-size: 0.8rem; color: var(--accent-spec); display: flex; align-items: center; gap: 5px; }
+    .rm-step-featured .rm-content { border-color: var(--accent-spec); background: rgba(16, 185, 129, 0.06); }
+    .rm-step-featured .rm-icon { border-color: var(--accent-spec); box-shadow: 0 0 20px rgba(16,185,129,0.4); background: var(--accent-spec); color: #000; }
 
     /* LIBRARY STYLES */
     .lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
@@ -408,13 +423,11 @@
     }
     
     .tech-marquee-wrapper {
-        position: fixed;
-        bottom: 80px;
-        left: 0;
+        position: relative;
         width: 100%;
         padding: 12px 0;
         z-index: 5;
-        background: rgba(5,5,7,0.95);
+        background: rgba(13,16,23,0.95);
         backdrop-filter: blur(10px);
     }
     
@@ -751,10 +764,10 @@
     .social-block {
         display: flex;
         justify-content: center;
-        gap: 15px;
-        padding: 15px 0;
-        margin-top: auto; /* Прижимает блок к низу, но перед профилем */
-        margin-bottom: 10px;
+        gap: 12px;
+        padding: 10px 0;
+        margin-top: 8px;
+        margin-bottom: 6px;
     }
     .soc-link {
         display: flex;
@@ -788,14 +801,15 @@
 
     /* LEGAL FOOTER STYLES */
     .legal-block {
-        margin-top: 15px;
-        padding-top: 15px;
+        margin-top: 10px;
+        padding-top: 10px;
         border-top: 1px dashed var(--glass-border);
         text-align: center;
         font-family: var(--font-mono);
-        font-size: 0.65rem;
+        font-size: 0.6rem;
         color: var(--text-muted);
         opacity: 0.6;
+        padding-bottom: 10px;
     }
     .legal-links {
         display: flex;
@@ -1027,11 +1041,28 @@
 </head>
 <body>
 
+<div id="boot-overlay">
+    <div class="boot-line">>> SYSTEM_ARCHITECT OS v10.2</div>
+    <div class="boot-line">>> LOADING: ICF_PROTOCOLS + N8N_CORE...</div>
+    <div class="boot-line">>> CHAOS DETECTION MODULE: ACTIVE</div>
+    <div class="boot-line">>> STATUS: READY TO DEPLOY</div>
+    <div class="boot-bar-wrap"><div class="boot-bar"></div></div>
+</div>
+<script>
+    setTimeout(() => {
+        const b = document.getElementById('boot-overlay');
+        if(b) b.classList.add('hidden');
+    }, 2800);
+</script>
+
 <div class="app-container">
 
     <nav class="sidebar">
-        <div class="logo-area">
-            <span class="material-symbols-outlined">grid_4x4</span> SYSTEM_ARCHITECT
+        <div class="logo-area" style="flex-direction: column; align-items: flex-start; gap: 4px; padding-left: 5px;">
+            <img src="assets/EAZ_jpg_чб( без фона).png"
+                 alt="EZA Group"
+                 style="height: 48px; width: auto; filter: brightness(0) invert(1); opacity: 0.9;">
+            <span style="font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em; color: var(--accent-primary); opacity: 0.7;">SYSTEM_ARCHITECT</span>
         </div>
         <ul class="nav-menu">
             <li class="nav-item active" onclick="router.go('welcome', this)">
@@ -1064,6 +1095,12 @@
             <li class="nav-item" onclick="router.go('faq', this)">
                 <span class="material-symbols-outlined nav-icon">help_center</span> FAQ
             </li>
+            <li class="nav-item" onclick="router.go('testimonials', this)">
+                <span class="material-symbols-outlined nav-icon">star</span> Отзывы
+            </li>
+            <li class="nav-item" onclick="router.go('aitest', this)">
+                <span class="material-symbols-outlined nav-icon">psychology_alt</span> AI Тест
+            </li>
 
         </ul>
         
@@ -1086,7 +1123,7 @@
     <!-- ДАЛЬШЕ ИДЕТ ПРОФИЛЬ -->
         
         <div class="user-profile" style="cursor: pointer;" onclick="router.go('profile', document.querySelectorAll('.nav-item')[2])">
-            <img src="me.jpg" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-primary);">
+            <img src="me.jpg" alt="Алексей Зотов" loading="lazy" onerror="this.style.display='none'" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-primary);">
             
             <div style="font-size:0.85rem; line-height:1.2;">
                 <div style="color:#fff; font-weight: 700;">Алексей Зотов</div>
@@ -1096,19 +1133,21 @@
                 <!-- ЮРИДИЧЕСКИЙ БЛОК -->
         <div class="legal-block">
             <div class="legal-links">
-                <a href="#policy" class="legal-a">Privacy Protocol</a>
+                <a href="#policy" class="legal-a">Политика конфиденциальности</a>
                 <span>::</span>
-                <a href="#terms" class="legal-a">Terms of Use</a>
+                <a href="#terms" class="legal-a">Согласие на обработку данных</a>
             </div>
             <div class="copyright">
-                © 2026 SYSTEM_ARCHITECT v10.2<br>
-                ALL RIGHTS RESERVED
+                © 2026 Алексей Зотов<br>
+                Все права защищены
             </div>
         </div>
     </nav>
 <div class="mobile-header">
-    <div class="logo-area" style="color:var(--accent-primary); font-family:var(--font-mono); font-weight:700; display:flex; align-items:center; gap:5px;">
-        <span class="material-symbols-outlined">grid_4x4</span> SYS_ARCH
+    <div style="display:flex; align-items:center;">
+        <img src="assets/EAZ_jpg_чб( без фона).png"
+             alt="EZA Group"
+             style="height: 36px; width: auto; filter: brightness(0) invert(1); opacity: 0.9;">
     </div>
     
     <div style="display: flex; align-items: center; gap: 12px;">
@@ -1127,7 +1166,7 @@
         
         <!-- Аватарка -->
         <div onclick="router.go('profile', null)">
-            <img src="me.jpg" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--accent-primary); object-fit: cover;">
+            <img src="me.jpg" alt="Алексей Зотов" onerror="this.style.display='none'" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--accent-primary); object-fit: cover;">
         </div>
     </div>
 </div>
@@ -1173,6 +1212,14 @@
         <span class="material-symbols-outlined">help_center</span>
         <span>FAQ</span>
     </div>
+    <div class="dock-item" onclick="router.go('testimonials', this)">
+        <span class="material-symbols-outlined">star</span>
+        <span>Отзывы</span>
+    </div>
+    <div class="dock-item" onclick="router.go('aitest', this)">
+        <span class="material-symbols-outlined">psychology_alt</span>
+        <span>AI Тест</span>
+    </div>
 </nav>
     <main class="main-viewport">
         
@@ -1191,6 +1238,11 @@
                     <button class="hero-btn" onclick="router.go('roi', document.querySelectorAll('.nav-item')[1])">
                         Остановить Хаос
                     </button>
+                    <div style="display:flex; justify-content:center; gap:30px; margin-top:30px; flex-wrap:wrap;">
+                        <div style="font-family:var(--font-mono); font-size:0.8rem; color:rgba(255,255,255,0.6); display:flex; align-items:center; gap:8px;"><span style="font-size:1.4rem; font-weight:800; color:#fff;">10+</span> кейсов</div>
+                        <div style="font-family:var(--font-mono); font-size:0.8rem; color:rgba(255,255,255,0.6); display:flex; align-items:center; gap:8px;"><span style="font-size:1.4rem; font-weight:800; color:var(--accent-spec);">-40%</span> рутины</div>
+                        <div style="font-family:var(--font-mono); font-size:0.8rem; color:rgba(255,255,255,0.6); display:flex; align-items:center; gap:8px;"><span style="font-size:1.4rem; font-weight:800; color:var(--accent-warn);">от 50к ₽</span></div>
+                    </div>
                 </div>
                 <div class="tech-marquee-wrapper">
                     <div class="tech-track">
@@ -1227,15 +1279,20 @@
                             
                             <div>
                                 <label style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px; display: block;">Часов рутины в день (копипаст, отчеты):</label>
-                                <input type="range" id="roi-hours" min="1" max="8" value="2" oninput="document.getElementById('h-val').innerText = this.value" style="width: 100%; accent-color: var(--accent-alert);">
+                                <input type="range" id="roi-hours" min="1" max="8" value="2" oninput="document.getElementById('h-val').innerText = this.value; calculateROI();" style="width: 100%; accent-color: var(--accent-alert);">
                                 <div style="text-align: right; color: var(--accent-primary); font-family: var(--font-mono); margin-top: 5px;"><span id="h-val">2</span> ч/день</div>
+                            </div>
+                            <div style="margin-top: 20px;">
+                                <label style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px; display: block;">Количество сотрудников в рутине:</label>
+                                <input type="number" id="roi-employees" value="1" min="1" max="500" style="width: 100%; background: #050507; border: 1px solid #333; color: #fff; padding: 15px; border-radius: 8px; font-size: 1rem; font-family: var(--font-mono);">
                             </div>
                         </div>
                         
                         <div style="text-align: center; display: flex; flex-direction: column; justify-content: center; border-left: 1px dashed #333; padding-left: 30px;">
                             <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Ежегодные потери:</div>
                            <div id="roi-total" style="font-size: 3rem; font-weight: 800; color: var(--accent-alert); margin: 15px 0;">360 000 ₽</div>
-                            <button class="hero-btn" onclick="router.go('profile', document.querySelectorAll('.nav-item')[2])" style="font-size: 0.8rem; padding: 15px;">ОКУПИТЬ АВТОМАТИЗАЦИЕЙ</button>
+                            <button class="hero-btn" onclick="window.open('https://t.me/zotov_coach_bot')" style="font-size: 0.8rem; padding: 15px;">ЗАПИСАТЬСЯ НА ДИАГНОСТИКУ</button>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">Бесплатно · 1 час · Без давления</div>
                         </div>
                     </div><div style="margin-top: 50px; border-top: 1px dashed var(--glass-border); padding-top: 30px;">
                         <h4 style="color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 20px;">:: SYSTEM_LOG / ОБНАРУЖЕНЫ УТЕЧКИ РЕСУРСОВ ::</h4>
@@ -1271,7 +1328,7 @@
             <div class="profile-container">
                 <div class="profile-card">
                     <div class="profile-visual">
-                        <img src=me1.jpg class="profile-photo" alt="Alexei Zotov">
+                        <img src="me1.jpg" class="profile-photo" loading="lazy" alt="Алексей Зотов — Бизнес-коуч ICF" onerror="this.style.background='var(--bg-sidebar)'">
                         <div class="badges-grid">
                             <div class="profile-badge" style="border-color:var(--accent-spec);">
                                 <span class="material-symbols-outlined pb-icon" style="color:var(--accent-spec)">verified</span>
@@ -1487,11 +1544,49 @@
                         </div>
                     </div>
                 </div>
-                ```
 
             </div>
-            <div style="margin-top:50px; text-align:center;">
+            <div style="margin-top:50px; margin-bottom:60px; text-align:center;">
                  <button class="hero-btn" onclick="router.go('roadmap', document.querySelectorAll('.nav-item')[4])">Как мы работаем</button>
+            </div>
+        </div>
+
+        <div id="view-testimonials" class="view-section">
+            <h2 style="margin-bottom:10px;">Отзывы <span style="font-size:1rem; opacity:0.5; font-family:var(--font-mono)">// CLIENT_REPORTS</span></h2>
+            <p style="color:var(--text-muted); margin-bottom:40px;">Что говорят клиенты после внедрения систем.</p>
+            <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:20px;">
+
+                <div style="background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:16px; padding:25px; position:relative; overflow:hidden;">
+                    <div style="position:absolute; top:0; left:0; width:100%; height:3px; background:var(--accent-spec);"></div>
+                    <div style="font-size:1.5rem; color:var(--accent-warn); margin-bottom:15px;">★★★★★</div>
+                    <p style="color:#ccc; font-size:0.95rem; line-height:1.6; margin-bottom:20px; font-style:italic;">"После внедрения бота расчёт стоимости авто занимает 2 минуты вместо 20. Клиенты перестали уходить к конкурентам."</p>
+                    <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-spec);">— Pardauto // Импорт авто</div>
+                </div>
+
+                <div style="background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:16px; padding:25px; position:relative; overflow:hidden;">
+                    <div style="position:absolute; top:0; left:0; width:100%; height:3px; background:var(--accent-biz);"></div>
+                    <div style="font-size:1.5rem; color:var(--accent-warn); margin-bottom:15px;">★★★★★</div>
+                    <p style="color:#ccc; font-size:0.95rem; line-height:1.6; margin-bottom:20px; font-style:italic;">"Команда наконец-то перестала саботировать изменения. Алексей работал с каждым сотрудником индивидуально — это ключевое отличие от других интеграторов."</p>
+                    <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-biz);">— Директор завода // Производство 60+ чел.</div>
+                </div>
+
+                <div style="background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:16px; padding:25px; position:relative; overflow:hidden;">
+                    <div style="position:absolute; top:0; left:0; width:100%; height:3px; background:var(--accent-life);"></div>
+                    <div style="font-size:1.5rem; color:var(--accent-warn); margin-bottom:15px;">★★★★★</div>
+                    <p style="color:#ccc; font-size:0.95rem; line-height:1.6; margin-bottom:20px; font-style:italic;">"Теперь 2 поста в день публикуются автоматически. Я занимаюсь стратегией, а не копирайтингом. -7 часов рутины каждую неделю."</p>
+                    <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-life);">— Психолог // Игропрактика, личный бренд</div>
+                </div>
+
+                <div style="background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:16px; padding:25px; position:relative; overflow:hidden;">
+                    <div style="position:absolute; top:0; left:0; width:100%; height:3px; background:var(--accent-spec);"></div>
+                    <div style="font-size:1.5rem; color:var(--accent-warn); margin-bottom:15px;">★★★★★</div>
+                    <p style="color:#ccc; font-size:0.95rem; line-height:1.6; margin-bottom:20px; font-style:italic;">"Цифровой Ординатор собирает анамнез до визита. На приёме я уже знаю всё о пациенте. +30% времени на сам приём."</p>
+                    <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-spec);">— Врач-гомеопат // Частная практика</div>
+                </div>
+
+            </div>
+            <div style="margin-top:50px; margin-bottom:60px; text-align:center;">
+                <button class="hero-btn" onclick="window.open('https://t.me/zotov_coach_bot')">Записаться на диагностику</button>
             </div>
         </div>
 
@@ -1500,11 +1595,12 @@
             <div class="roadmap-container">
                 <div class="roadmap-line"></div>
                 
-                <div class="rm-step">
+                <div class="rm-step rm-step-featured">
                     <div class="rm-icon">01</div>
                     <div class="rm-content">
-                        <div class="rm-header"><div class="rm-title">Диагностическая Сессия</div><div class="rm-tag">Бесплатно</div></div>
+                        <div class="rm-header"><div class="rm-title">Диагностическая Сессия</div><div class="rm-tag" style="background:rgba(16,185,129,0.2); color:var(--accent-spec);">✓ Бесплатно</div></div>
                         <div class="rm-desc">Встреча 1 час. Сбор болей, знакомство и выявление узких мест.</div>
+                        <div class="rm-artifact"><span class="material-symbols-outlined" style="font-size:14px;">arrow_forward</span> Начать прямо сейчас → @zotov_coach_bot</div>
                     </div>
                 </div>
                 <div class="rm-step">
@@ -1550,7 +1646,7 @@
                     </div>
                 </div>
             </div>
-            <div style="margin-top:50px; text-align:center;">
+            <div style="margin-top:50px; margin-bottom:60px; text-align:center;">
                 <button class="hero-btn" onclick="window.open('https://t.me/zotov_coach_bot')">Начать с Диагностики</button>
             </div>
         </div>
@@ -1676,6 +1772,9 @@
         </div>
         <div id="view-matrix" class="view-section">
             <h2 style="margin-bottom:30px;">Матрица Решений <span style="font-size:1rem; opacity:0.5; margin-left:10px;">// DATABASE</span></h2>
+            <div style="margin-bottom:20px;">
+                <input type="text" id="matrix-search" placeholder="Поиск по решению..." oninput="matrixApp.search(this.value)" style="width:100%; max-width:400px; background:#050507; border:1px solid var(--glass-border); color:#fff; padding:12px 16px; border-radius:10px; font-size:0.9rem; font-family:var(--font-main); outline:none;" onfocus="this.style.borderColor='var(--accent-primary)'" onblur="this.style.borderColor='var(--glass-border)'">
+            </div>
             <div class="matrix-toggle">
                 <div id="m-btn-biz" class="m-btn active-biz" onclick="matrixApp.setMode('biz')"><span class="material-symbols-outlined">domain</span> Бизнес</div>
                 <div id="m-btn-spec" class="m-btn" onclick="matrixApp.setMode('spec')"><span class="material-symbols-outlined">psychology</span> Эксперт</div>
@@ -1709,8 +1808,9 @@
                     <button class="hero-btn" style="width: 100%; font-size: 0.9rem; padding: 15px; background: transparent; border: 1px solid var(--accent-spec);" onclick="window.open('https://t.me/zotov_coach_bot')">Выбрать MVP</button>
                 </div>
 
-                <div style="background: rgba(91, 108, 249, 0.1); border: 2px solid var(--accent-primary); border-radius: 20px; padding: 30px; position: relative; transform: scale(1.02); box-shadow: 0 0 40px rgba(91, 108, 249, 0.15); display: flex; flex-direction: column;">
-                    <div style="position: absolute; top: 15px; right: 15px; background: var(--accent-primary); color: #fff; font-size: 0.65rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; letter-spacing: 1px;">POPULAR</div>
+                <div style="background: rgba(91, 108, 249, 0.1); border: 2px solid var(--accent-primary); border-radius: 20px; padding: 30px; position: relative; box-shadow: 0 0 50px rgba(91, 108, 249, 0.25), 0 0 100px rgba(91, 108, 249, 0.1); animation: pricingGlow 3s ease-in-out infinite; display: flex; flex-direction: column;">
+                    <style>@keyframes pricingGlow { 0%,100%{box-shadow:0 0 50px rgba(91,108,249,0.25),0 0 100px rgba(91,108,249,0.1);} 50%{box-shadow:0 0 70px rgba(91,108,249,0.4),0 0 120px rgba(91,108,249,0.2);} }</style>
+                    <div style="position: absolute; top: 15px; right: 15px; background: var(--accent-primary); color: #fff; font-size: 0.65rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; letter-spacing: 1px; font-family: var(--font-mono);">>> OPTIMAL</div>
                     <h3 style="font-size: 1.4rem; margin-bottom: 5px;">Business OS</h3>
                     <div style="font-family: var(--font-mono); color: var(--accent-primary); font-size: 0.8rem; margin-bottom: 20px;">СИСТЕМА ПОД КЛЮЧ</div>
                     <div style="font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 5px;">от 150к ₽</div>
@@ -1891,7 +1991,7 @@
 
             </div>
 
-            <div style="margin-top:50px; text-align:center;">
+            <div style="margin-top:50px; margin-bottom:60px; text-align:center;">
                 <p style="color:#fff; margin-bottom:20px; font-size:1.2rem;">Остались вопросы?</p>
                 <button class="hero-btn" onclick="window.open('https://t.me/Aleksei_Zotov')">Написать мне лично</button>
             </div>
@@ -1965,7 +2065,7 @@
                     
                     <div style="display:flex; gap:15px; justify-content:center;">
                         <button class="hero-btn" onclick="document.getElementById('test-result-box').style.display='none'; document.getElementById('quiz-form-area').style.display='block';">Пройти заново</button>
-                        <button class="hero-btn" style="background:transparent; border:1px solid var(--accent-blue);" onclick="window.open('https://t.me/Aleksei_Zotov')">Обсудить стратегию</button>
+                        <button class="hero-btn" style="background:transparent; border:1px solid var(--accent-primary);" onclick="window.open('https://t.me/Aleksei_Zotov')">Обсудить стратегию</button>
                     </div>
                 </div>
 
@@ -2095,35 +2195,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ROI CALCULATOR LOGIC
 function calculateROI() {
-    const salary = parseFloat(document.getElementById('roi-salary').value);
-    const hours = parseFloat(document.getElementById('roi-hours').value);
-    
-    // Логика:
-    // 1. Часовая ставка = ЗП / 160 (стандартная норма часов)
-    // 2. Стоимость рутины в месяц = Ставка * Часы в день * 21 (рабочий день)
-    // 3. Стоимость в год = Месяц * 12
-    // 4. Коэффициент косвенных потерь (налоги, рабочее место) = 1.3 (можно убрать, если хочешь "чистыми")
-    
+    const salary = parseFloat(document.getElementById('roi-salary').value) || 0;
+    const hours = parseFloat(document.getElementById('roi-hours').value) || 0;
+    const employees = parseFloat(document.getElementById('roi-employees').value) || 1;
+
     const costPerHour = salary / 160;
-    const monthlyLoss = costPerHour * hours * 21; 
-    const yearlyLoss = monthlyLoss * 12;
-    
-    // Добавляем 30% сверху как налоги и упущенную выгоду (опционально, но так честнее для B2B)
+    const monthlyLoss = costPerHour * hours * 21;
+    const yearlyLoss = monthlyLoss * 12 * employees;
     const totalLost = Math.round(yearlyLoss * 1.3);
 
-    // Форматируем число с пробелами (например 250 000)
     document.getElementById('roi-total').innerText = totalLost.toLocaleString('ru-RU') + ' ₽';
 }
 
 // Initialize listeners for ROI
 document.getElementById('roi-salary').addEventListener('input', calculateROI);
 document.getElementById('roi-hours').addEventListener('input', calculateROI);
+document.getElementById('roi-employees').addEventListener('input', calculateROI);
 
 // Запускаем расчет сразу при загрузке, чтобы не было нуля
 calculateROI();
-// Initialize listeners for ROI
-document.getElementById('roi-salary').addEventListener('input', calculateROI);
-document.getElementById('roi-hours').addEventListener('input', calculateROI);
 
 
 const matrixApp = {
@@ -2172,6 +2262,45 @@ const matrixApp = {
     mode: 'biz', idx: 0,
 
     init: function() { this.render(); },
+    search: function(q) {
+        if (!q.trim()) { this.render(); return; }
+        const ql = q.toLowerCase();
+        const all = [...this.data.biz, ...this.data.spec, ...this.data.life];
+        const filtered = all.filter(item =>
+            item.name.toLowerCase().includes(ql) ||
+            item.title.toLowerCase().includes(ql) ||
+            item.pain.some(p => p.toLowerCase().includes(ql)) ||
+            item.gain.some(g => g.toLowerCase().includes(ql))
+        );
+        document.getElementById('matrix-nav').innerHTML = filtered.map((item, i) => `
+            <div class="dept-btn ${i===0 ? 'active' : ''}" onclick="matrixApp.renderItem(${JSON.stringify(item).replace(/"/g,'&quot;')})">
+                <span style="font-weight:600; font-size:0.9rem;">${item.name}</span>
+                <span class="material-symbols-outlined" style="font-size:20px; color:var(--text-muted)">${item.icon}</span>
+            </div>
+        `).join('') || '<div style="color:var(--text-muted); padding:20px;">Ничего не найдено</div>';
+        if (filtered.length > 0) this.renderItem(filtered[0]);
+    },
+    renderItem: function(item) {
+        const modeMap = {biz: 'var(--accent-biz)', spec: 'var(--accent-spec)', life: 'var(--accent-life)'};
+        const accent = 'var(--accent-primary)';
+        document.getElementById('matrix-sol').innerHTML = `
+            <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                <h2 style="margin:0; font-size:1.8rem; line-height:1.2;">${item.title}</h2>
+                <span class="material-symbols-outlined" style="font-size:40px; color:${accent}; opacity:0.5;">${item.icon}</span>
+            </div>
+            <div class="pain-gain-row">
+                <div><h4 style="color:var(--accent-alert); margin-bottom:10px;">ПРОБЛЕМА</h4>${item.pain.map(p => `<div style="padding-left:15px; position:relative; font-size:0.9rem; color:#aaa; margin-bottom:8px;">:: ${p}</div>`).join('')}</div>
+                <div><h4 style="color:#22c55e; margin-bottom:10px;">РЕШЕНИЕ</h4>${item.gain.map(g => `<div style="padding-left:15px; position:relative; font-size:0.9rem; color:#fff; margin-bottom:8px;">>> ${g}</div>`).join('')}</div>
+            </div>
+            <h4 style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;">АРХИТЕКТУРА (FLOW):</h4>
+            <div class="pipeline-vis">
+                ${item.pipe.map((p, i) => `<div class="p-node">${p}</div>${i < item.pipe.length-1 ? '<span class="material-symbols-outlined p-arrow">arrow_forward</span>' : ''}`).join('')}
+            </div>
+            <div style="margin-top:30px; text-align:right;">
+                <button class="hero-btn" style="padding:12px 25px; font-size:0.85rem; background:${accent}; box-shadow:none;">Внедрить модуль</button>
+            </div>
+        `;
+    },
     setMode: function(m) {
         this.mode = m; this.idx = 0;
         document.getElementById('m-btn-biz').className = `m-btn ${m==='biz'?'active-biz':''}`;
@@ -2407,6 +2536,30 @@ matrixApp.init();
     }
 </style>
 
+<style>
+    /* BOOT SEQUENCE */
+    #boot-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: var(--bg-core); z-index: 99999;
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        animation: bootFadeOut 0.5s ease 2.2s forwards;
+    }
+    #boot-overlay.hidden { display: none; }
+    .boot-line {
+        font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-spec);
+        letter-spacing: 0.1em; margin-bottom: 8px; opacity: 0;
+    }
+    .boot-line:nth-child(1) { animation: bootAppear 0.3s ease 0.1s forwards; }
+    .boot-line:nth-child(2) { animation: bootAppear 0.3s ease 0.5s forwards; }
+    .boot-line:nth-child(3) { animation: bootAppear 0.3s ease 0.9s forwards; }
+    .boot-line:nth-child(4) { animation: bootAppear 0.3s ease 1.3s forwards; color: var(--accent-primary); }
+    .boot-bar-wrap { width: 300px; height: 2px; background: rgba(255,255,255,0.1); margin-top: 20px; border-radius: 2px; overflow: hidden; }
+    .boot-bar { height: 100%; width: 0; background: var(--accent-primary); animation: bootBar 1.8s ease 0.3s forwards; }
+    @keyframes bootAppear { to { opacity: 1; } }
+    @keyframes bootBar { to { width: 100%; } }
+    @keyframes bootFadeOut { to { opacity: 0; pointer-events: none; } }
+</style>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         
@@ -2599,14 +2752,22 @@ matrixApp.init();
             return;
         }
         if(!hub) return;
+        const svgRect = svg.getBoundingClientRect();
         const hr = hub.getBoundingClientRect();
-        if(hr.width === 0) return; 
-        
-        const cx = hr.left + hr.width/2, cy = hr.top + hr.height/2;
+        if(hr.width === 0) return;
+
+        const cx = hr.left + hr.width/2 - svgRect.left;
+        const cy = hr.top + hr.height/2 - svgRect.top;
+
         lBase.forEach((l, i) => {
-            const nr = myNodes[i].getBoundingClientRect(), nx = nr.left + nr.width/2, ny = nr.top + nr.height/2;
-            l.el.setAttribute('x1', cx); l.el.setAttribute('y1', cy); l.el.setAttribute('x2', nx); l.el.setAttribute('y2', ny); l.el.style.opacity = '1';
-            lFlow[i].el.setAttribute('x1', cx); lFlow[i].el.setAttribute('y1', cy); lFlow[i].el.setAttribute('x2', nx); lFlow[i].el.setAttribute('y2', ny);
+            const nr = myNodes[i].getBoundingClientRect();
+            const nx = nr.left + nr.width/2 - svgRect.left;
+            const ny = nr.top + nr.height/2 - svgRect.top;
+            l.el.setAttribute('x1', cx); l.el.setAttribute('y1', cy);
+            l.el.setAttribute('x2', nx); l.el.setAttribute('y2', ny);
+            l.el.style.opacity = '1';
+            lFlow[i].el.setAttribute('x1', cx); lFlow[i].el.setAttribute('y1', cy);
+            lFlow[i].el.setAttribute('x2', nx); lFlow[i].el.setAttribute('y2', ny);
         });
     }
     window.addEventListener('resize', updateLines);
